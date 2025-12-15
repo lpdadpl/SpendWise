@@ -1,30 +1,35 @@
-// src/main/java/com.hazerta/spendwiseback/entity/Category.java
-
 package com.hazerta.SpendwiseBack.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "category")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Cambiado a Long
+    private Long id;
 
-    @Column(nullable = false, length = 50)
-    private String name; // Nombre de la categoría (ej: "Salario", "Alquiler")
+    @Column(nullable = false)
+    private String name;
 
-    // Relación Many-to-One con User
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false) // Columna FK en la tabla 'category'
-    private User user; // El usuario dueño de esta categoría
+    @Column(nullable = false)
+    private String type; // Considerar si esto es un Enum si solo hay tipos fijos.
 
-    // Campo para saber si es Gasto o Ingreso (usaremos un Enum más adelante)
-    @Column(length = 10, nullable = false)
-    private String type; // Por ahora String, luego lo cambiaremos a Enum
+    // Relación Many-to-One con User (User_id en la BD)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    // Relación One-to-Many con Transaction
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Transaction> transactions;
 }

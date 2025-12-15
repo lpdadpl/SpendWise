@@ -1,4 +1,4 @@
-package com.hazerta.SpendwiseBack.entity; 
+package com.hazerta.SpendwiseBack.model;
 
 public enum Role {
     USER,
