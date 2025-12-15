@@ -1,0 +1,140 @@
+<div class="min-h-screen bg-gray-50">
+    <app-navbar></app-navbar>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Welcome Section -->
+        <div class="mb-8">
+            <h1 class="mb-2 text-3xl font-bold" style="color: var(--color-dark-blue)">
+                ¡Bienvenido, {{ authService.currentUser()?.username }}!
+            </h1>
+            <p class="text-gray-600">
+                ¿Qué te gustaría hacer hoy?
+            </p>
+        </div>
+
+        <!-- Quick Actions Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <button (click)="navigate('/templates/new')"
+                class="hover:opacity-90 text-white rounded-2xl p-6 text-left transition-all hover:scale-105 hover:shadow-lg"
+                style="background-color: #5B7C99">
+                <lucide-icon name="plus" class="w-10 h-10 mb-4"></lucide-icon>
+                <h3 class="mb-2 font-bold text-xl">Crear Plantilla</h3>
+                <p class="text-white/90 text-sm">Diseña un nuevo presupuesto personalizado</p>
+            </button>
+
+            <button (click)="navigate('/templates/search')"
+                class="hover:opacity-90 text-white rounded-2xl p-6 text-left transition-all hover:scale-105 hover:shadow-lg"
+                style="background-color: #7FB685">
+                <lucide-icon name="search" class="w-10 h-10 mb-4"></lucide-icon>
+                <h3 class="mb-2 font-bold text-xl">Buscar Plantillas</h3>
+                <p class="text-white/90 text-sm">Explora plantillas existentes</p>
+            </button>
+
+            <button (click)="navigate('/users/search')"
+                class="hover:opacity-90 text-white rounded-2xl p-6 text-left transition-all hover:scale-105 hover:shadow-lg"
+                style="background-color: #5B7C99">
+                <lucide-icon name="users" class="w-10 h-10 mb-4"></lucide-icon>
+                <h3 class="mb-2 font-bold text-xl">Buscar Usuarios</h3>
+                <p class="text-white/90 text-sm">Encuentra otros usuarios de Spendwise</p>
+            </button>
+
+            <button (click)="navigate('/profile')"
+                class="hover:opacity-90 text-white rounded-2xl p-6 text-left transition-all hover:scale-105 hover:shadow-lg"
+                style="background-color: #7FB685">
+                <lucide-icon name="user-circle" class="w-10 h-10 mb-4"></lucide-icon>
+                <h3 class="mb-2 font-bold text-xl">Mi Perfil</h3>
+                <p class="text-white/90 text-sm">Administra tu cuenta y preferencias</p>
+            </button>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="grid md:grid-cols-3 gap-6 mb-12">
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-900 font-bold">Plantillas Creadas</h3>
+                    <lucide-icon name="file-text" class="w-8 h-8"
+                        style="color: var(--color-primary-blue)"></lucide-icon>
+                </div>
+                <p class="text-gray-600">0 plantillas</p>
+                <div class="mt-4 h-2 bg-gray-100 rounded-full">
+                    <div class="h-2 rounded-full" style="width: 0%; background-color: var(--color-primary-blue)"></div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-900 font-bold">Presupuesto Total</h3>
+                    <lucide-icon name="wallet" class="w-8 h-8" style="color: var(--color-primary-green)"></lucide-icon>
+                </div>
+                <p class="text-gray-600">$0.00</p>
+                <div class="mt-4 h-2 bg-gray-100 rounded-full">
+                    <div class="h-2 rounded-full" style="width: 0%; background-color: var(--color-primary-green)"></div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-900 font-bold">Actividad</h3>
+                    <lucide-icon name="trending-up" class="w-8 h-8"
+                        style="color: var(--color-primary-blue)"></lucide-icon>
+                </div>
+                <p class="text-gray-600">Sin actividad reciente</p>
+                <div class="mt-4 h-2 bg-gray-100 rounded-full">
+                    <div class="h-2 rounded-full" style="width: 0%; background-color: var(--color-primary-blue)"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Getting Started -->
+        <div class="rounded-2xl p-8 text-white"
+            style="background: linear-gradient(135deg, var(--color-primary-blue) 0%, var(--color-primary-green) 100%)">
+            <h2 class="mb-4 text-2xl font-bold">Comienza a Controlar tus Finanzas</h2>
+            <p class="mb-6 opacity-90">
+                Crea tu primera plantilla de presupuesto para empezar a rastrear tus gastos de manera efectiva.
+            </p>
+            <button (click)="navigate('/templates/new')"
+                class="px-6 py-3 bg-white rounded-lg transition-colors hover:bg-gray-100 font-bold"
+                style="color: var(--color-primary-green)">
+                Crear Mi Primera Plantilla
+            </button>
+        </div>
+
+        <!-- Tips -->
+        <div class="mt-12 grid md:grid-cols-3 gap-6">
+            <div class="bg-white rounded-xl p-6 border border-gray-200">
+                <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4"
+                    style="background-color: var(--color-light-blue)">
+                    <lucide-icon name="file-text" class="w-6 h-6"
+                        style="color: var(--color-primary-blue)"></lucide-icon>
+                </div>
+                <h4 class="mb-2 font-bold" style="color: var(--color-dark-blue)">Tip 1: Organiza por Categorías</h4>
+                <p class="text-gray-600 text-sm">
+                    Divide tu presupuesto en categorías como vivienda, alimentación y transporte para un mejor control.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 border border-gray-200">
+                <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4"
+                    style="background-color: var(--color-light-green)">
+                    <lucide-icon name="trending-up" class="w-6 h-6"
+                        style="color: var(--color-primary-green)"></lucide-icon>
+                </div>
+                <h4 class="mb-2 font-bold" style="color: var(--color-dark-blue)">Tip 2: Establece Límites</h4>
+                <p class="text-gray-600 text-sm">
+                    Define límites realistas para cada categoría basándote en tus ingresos mensuales.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 border border-gray-200">
+                <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4"
+                    style="background-color: var(--color-light-blue)">
+                    <lucide-icon name="wallet" class="w-6 h-6" style="color: var(--color-primary-blue)"></lucide-icon>
+                </div>
+                <h4 class="mb-2 font-bold" style="color: var(--color-dark-blue)">Tip 3: Revisa Regularmente</h4>
+                <p class="text-gray-600 text-sm">
+                    Actualiza y revisa tu presupuesto al menos una vez al mes para mantenerlo relevante.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

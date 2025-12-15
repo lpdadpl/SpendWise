@@ -1,0 +1,25 @@
+<nav class="bg-white shadow">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex">
+        <a routerLink="/" class="flex-shrink-0 flex items-center">
+          <span class="text-xl font-bold text-gray-800">SpendWise</span>
+        </a>
+      </div>
+      <div class="flex items-center">
+        <ng-container *ngIf="authService.currentUser() as user; else guestLinks">
+          <span class="text-gray-600 mr-4">Hola, {{ user.username }}</span>
+          <a routerLink="/dashboard" routerLinkActive="text-indigo-600" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+          <a routerLink="/profile" routerLinkActive="text-indigo-600" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Perfil</a>
+          <button (click)="logout()" class="ml-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200">
+            Cerrar Sesión
+          </button>
+        </ng-container>
+        <ng-template #guestLinks>
+          <a routerLink="/login" routerLinkActive="text-indigo-600" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Iniciar Sesión</a>
+          <a routerLink="/register" routerLinkActive="text-indigo-600" class="bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-md text-sm font-medium ml-3 transition-colors duration-200">Registrarse</a>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</nav>

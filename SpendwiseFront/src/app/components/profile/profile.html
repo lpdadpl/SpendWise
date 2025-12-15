@@ -1,0 +1,159 @@
+<div class="min-h-screen bg-gray-50">
+    <app-navbar></app-navbar>
+
+    <div class="container mx-auto px-4 py-8 max-w-3xl">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Mi Perfil</h1>
+            <p class="text-gray-600">
+                Administra tu información personal y configuración de cuenta
+            </p>
+        </div>
+
+        <!-- Success Message -->
+        <div *ngIf="success" class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3">
+            <lucide-icon name="check-circle" class="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5"></lucide-icon>
+            <p class="text-green-800">{{ success }}</p>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="error" class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
+            <lucide-icon name="alert-circle" class="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5"></lucide-icon>
+            <p class="text-red-800">{{ error }}</p>
+        </div>
+
+        <!-- Profile Header -->
+        <div class="rounded-xl p-8 text-white mb-6"
+            style="background: linear-gradient(135deg, var(--color-primary-blue) 0%, var(--color-primary-green) 100%)">
+            <div class="flex items-center gap-6">
+                <div class="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                    <lucide-icon name="user-circle" class="w-12 h-12 text-white"></lucide-icon>
+                </div>
+                <div>
+                    <h2 class="mb-1 font-bold text-2xl">{{ authService.currentUser()?.username }}</h2>
+                    <p class="text-white/90">{{ authService.currentUser()?.email }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Form -->
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-gray-900 font-bold text-xl">Información de la Cuenta</h2>
+                <button *ngIf="!isEditing" (click)="isEditing = true"
+                    class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                    Editar Perfil
+                </button>
+            </div>
+
+            <form (ngSubmit)="handleSubmit()" class="space-y-6">
+                <!-- Username -->
+                <div>
+                    <label htmlFor="username" class="block text-gray-700 mb-2">
+                        Nombre de Usuario
+                    </label>
+                    <div class="relative">
+                        <lucide-icon name="user-circle"
+                            class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></lucide-icon>
+                        <input id="username" type="text" [(ngModel)]="username" name="username"
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+                            [disabled]="!isEditing || isLoading" />
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label htmlFor="email" class="block text-gray-700 mb-2">
+                        Email
+                    </label>
+                    <div class="relative">
+                        <lucide-icon name="mail"
+                            class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></lucide-icon>
+                        <input id="email" type="email" [(ngModel)]="email" name="email"
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+                            [disabled]="!isEditing || isLoading" />
+                    </div>
+                </div>
+
+                <!-- Password Section - Only visible when editing -->
+                <div *ngIf="isEditing" class="border-t border-gray-200 pt-6">
+                    <h3 class="text-gray-900 mb-4 font-bold">Cambiar Contraseña</h3>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Deja estos campos en blanco si no deseas cambiar tu contraseña
+                    </p>
+
+                    <div class="space-y-4">
+                        <!-- Current Password -->
+                        <div>
+                            <label htmlFor="currentPassword" class="block text-gray-700 mb-2">
+                                Contraseña Actual
+                            </label>
+                            <div class="relative">
+                                <lucide-icon name="lock"
+                                    class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></lucide-icon>
+                                <input id="currentPassword" type="password" [(ngModel)]="currentPassword"
+                                    name="currentPassword"
+                                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="••••••••" [disabled]="isLoading" />
+                            </div>
+                        </div>
+
+                        <!-- New Password -->
+                        <div>
+                            <label htmlFor="newPassword" class="block text-gray-700 mb-2">
+                                Nueva Contraseña
+                            </label>
+                            <div class="relative">
+                                <lucide-icon name="lock"
+                                    class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></lucide-icon>
+                                <input id="newPassword" type="password" [(ngModel)]="newPassword" name="newPassword"
+                                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="••••••••" [disabled]="isLoading" />
+                            </div>
+                            <p class="text-gray-500 text-sm mt-1">Mínimo 6 caracteres</p>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div>
+                            <label htmlFor="confirmPassword" class="block text-gray-700 mb-2">
+                                Confirmar Nueva Contraseña
+                            </label>
+                            <div class="relative">
+                                <lucide-icon name="lock"
+                                    class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></lucide-icon>
+                                <input id="confirmPassword" type="password" [(ngModel)]="confirmPassword"
+                                    name="confirmPassword"
+                                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="••••••••" [disabled]="isLoading" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div *ngIf="isEditing" class="flex gap-4 pt-4">
+                    <button type="button" (click)="handleCancel()" [disabled]="isLoading"
+                        class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50">
+                        Cancelar
+                    </button>
+                    <button type="submit" [disabled]="isLoading"
+                        class="flex-1 px-6 py-3 text-white rounded-lg transition-all hover:opacity-90 disabled:bg-gray-400"
+                        [style.background-color]="isLoading ? undefined : 'var(--color-primary-green)'">
+                        {{ isLoading ? 'Guardando...' : 'Guardar Cambios' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Account Stats -->
+        <div class="mt-6 grid md:grid-cols-2 gap-6">
+            <div class="bg-white rounded-xl p-6 border border-gray-200">
+                <h3 class="text-gray-900 mb-2 font-bold">Estado de la Cuenta</h3>
+                <p class="text-gray-600 text-sm">Activa</p>
+            </div>
+            <div class="bg-white rounded-xl p-6 border border-gray-200">
+                <h3 class="text-gray-900 mb-2 font-bold">Miembro desde</h3>
+                <p class="text-gray-600 text-sm">2025</p>
+            </div>
+        </div>
+    </div>
+</div>

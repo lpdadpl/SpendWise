@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: SpendwiseBack
+
+
+
+  datasource:
+    primary:
+      driver-class-name: org.postgresql.Driver
+      url: jdbc:postgresql://localhost/Spendwise
+      username: postgres
+      password: a
+    secondary:
+      driver-class-name: org.postgresql.Driver
+      url: jdbc:postgresql://localhost:5433/Spendwise
+      username: root
+      password: root1234@
+
+
+
+  # Configuración de JPA/Hibernate para crear automáticamente las tablas
+  jpa:
+    hibernate:
+      # 'update' es seguro para el desarrollo: crea si no existe, actualiza si hay cambios.
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+# Configuración del Token Web JSON (JWT)
+jwt:
+  # CLAVE SECRETA: debe ser larga, aleatoria y única.
+  secret: UnaClaveMuyLargaYComplejaDeAlMenos32CaracteresParaJWT
