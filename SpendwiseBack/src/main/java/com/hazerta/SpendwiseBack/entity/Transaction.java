@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal; // Importante para cálculos monetarios
 
 @Entity
-@Table(name = "transaction")
+@Table(name = "app_transaction")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

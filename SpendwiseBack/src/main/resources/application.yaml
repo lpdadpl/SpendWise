@@ -2,6 +2,15 @@ spring:
   application:
     name: SpendwiseBack
 
+  sql:
+    init:
+      mode: always
+
+  flyway:
+    enabled: false
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/Spendwise
@@ -11,10 +20,14 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
     show-sql: true
     properties:
       hibernate:
         format_sql: true
 
+    defer-datasource-initialization: true
+
 jwt:
-  secret: UnaClaveMuyLargaYComplejaDeAlMenos32CaracteresParaJWT
+  # Clave robusta de 64 caracteres (512 bits) generada aleatoriamente
+  secret: 16d557376a20c3866385d0d62540b6e41b22e1b4f4c7e6c9869a842f1b4c954a
