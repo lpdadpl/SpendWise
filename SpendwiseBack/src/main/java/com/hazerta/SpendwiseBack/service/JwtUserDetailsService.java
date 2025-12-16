@@ -13,10 +13,8 @@ import java.util.ArrayList;
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
 
-
     @Autowired
     private UserRepository userRepository;
-
 
     /**
      * Carga los detalles del usuario por nombre de usuario.
@@ -29,37 +27,15 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        // =========================================================================
-        // --- LÓGICA DE SIMULACIÓN (Reemplazar con búsqueda en la DB real) ---
-        // =========================================================================
+        // Buscar usuario en la base de datos por Username O Email
+        com.hazerta.SpendwiseBack.entity.User user = userRepository.findByUsernameOrEmail(username, username)
+                .orElseThrow(
+                        () -> new UsernameNotFoundException("Usuario no encontrado con username/email: " + username));
 
-        if ("user@hazerta.com".equals(username)) {
-            // Usuario simulado: "user@hazerta.com" con la contraseña "password"
-            // Nota: La contraseña debe ser la codificada si la DB la tiene codificada.
-            // La contraseña codificada de "password" usando BCrypt es algo como:
-            // "$2a$10$slYjKY03vO14A6G04iM2i.qO16oE4LzWbXy/Wk5k1Lp/V2c/V2Vf."
-
-            // Usamos un objeto User de Spring Security
-            return new User(username,
-                    "$2a$10$slYjKY03vO14A6G04iM2i.qO16oE4LzWbXy/Wk5k1Lp/V2c/V2Vf.",
-                    new ArrayList<>()); // Los roles/autoridades van aquí (ej: "ROLE_USER")
-
-        } else {
-            // =========================================================================
-            // --- LÓGICA REAL (Usando un repositorio) ---
-            // =========================================================================
-            /*
-            Optional<UserEntity> userOptional = userRepository.findByEmail(username);
-            if (userOptional.isPresent()) {
-                UserEntity user = userOptional.get();
-                return new User(user.getEmail(), user.getPassword(), new ArrayList<>());
-            } else {
-                throw new UsernameNotFoundException("Usuario no encontrado con el email: " + username);
-            }
-            */
-            // =========================================================================
-
-            throw new UsernameNotFoundException("Usuario no encontrado con el email: " + username);
-        }
+        // Construir y retornar el objeto UserDetails de Spring Security
+        // Se asume que user.getPassword() ya tiene el hash BCrypt
+        return new User(user.getUsername(),
+                user.getPassword(),
+                new ArrayList<>()); // Aquí se podrían añadir roles/autoridades si fuera necesario
     }
 }

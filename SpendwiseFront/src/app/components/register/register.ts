@@ -25,13 +25,20 @@ export class RegisterComponent {
     onSubmit() {
         this.error = '';
         this.isLoading = true;
-        const result = this.authService.register(this.username, this.email, this.password);
-        this.isLoading = false;
-        if (result.success) {
-            this.success = true;
-            setTimeout(() => this.router.navigate(['/login']), 1500);
-        } else {
-            this.error = result.message || 'Error';
-        }
+        this.authService.register(this.username, this.email, this.password).subscribe({
+            next: (result) => {
+                this.isLoading = false;
+                if (result.success) {
+                    this.success = true;
+                    setTimeout(() => this.router.navigate(['/login']), 1500);
+                } else {
+                    this.error = result.message || 'Error';
+                }
+            },
+            error: () => {
+                this.isLoading = false;
+                this.error = 'Error de conexión';
+            }
+        });
     }
 }

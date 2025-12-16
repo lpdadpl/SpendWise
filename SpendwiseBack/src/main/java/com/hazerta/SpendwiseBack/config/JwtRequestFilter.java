@@ -48,7 +48,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 // Podrías lanzar una excepción o configurar una respuesta específica aquí
             }
         } else {
-            logger.warn("El token JWT no comienza con 'Bearer String' o no está presente.");
+            // Solo loguear advertencia si NO es un endpoint público de autenticación
+            if (!request.getRequestURI().startsWith("/auth/")) {
+                logger.warn("El token JWT no comienza con 'Bearer String' o no está presente.");
+            }
         }
 
         // 3. Validar el token y establecer la autenticación si no está ya autenticado

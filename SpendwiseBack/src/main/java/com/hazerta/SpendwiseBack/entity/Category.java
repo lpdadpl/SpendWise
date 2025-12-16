@@ -22,14 +22,12 @@ public class Category {
     private String name;
 
     @Column(nullable = false)
-    private String type; // Considerar si esto es un Enum si solo hay tipos fijos.
+    private String type;
 
-    // Relación Many-to-One con User (User_id en la BD)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // Relación One-to-Many con Transaction
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Transaction> transactions;
 }

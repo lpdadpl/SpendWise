@@ -23,12 +23,24 @@ export class LoginComponent {
     onSubmit() {
         this.error = '';
         this.isLoading = true;
-        const result = this.authService.login(this.username, this.password);
-        this.isLoading = false;
-        if (result.success) {
-            this.router.navigate(['/dashboard']);
-        } else {
-            this.error = result.message || 'Error';
-        }
+        this.authService.login(this.username, this.password).subscribe({
+            next: (result) => {
+                this.isLoading = false;
+                // Si el login es exitoso, el backend devuelve un objeto con el token.
+                // Si hay error, salta al bloque 'error'.
+                this.router.navigate(['/dashboard']);
+            },
+            error: (err) => {
+                console.error("Login fallido:", err);
+                this.isLoading = false;
+                if (err.status === 401) {
+                    this.error = 'Credenciales incorrectas.';
+                } else if (err.status === 400) {
+                    this.error = err.error || 'Datos inválidos.';
+                } else {
+                    this.error = 'Error de conexión. Inténtelo más tarde.';
+                }
+            }
+        });
     }
 }

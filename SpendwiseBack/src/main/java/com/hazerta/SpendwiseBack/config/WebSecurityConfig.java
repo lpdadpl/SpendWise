@@ -16,10 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-/**
- * Clase de configuración principal de Spring Security.
- * Define las políticas de autenticación y las restricciones de acceso.
- */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
@@ -33,9 +29,6 @@ public class WebSecurityConfig {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
-    /**
-     * Define el codificador de contraseñas (BCrypt recomendado).
-     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -43,45 +36,46 @@ public class WebSecurityConfig {
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
-        // CORRECCIÓN: Pasar el UserDetailsService al constructor directamente.
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(jwtUserDetailsService);
-
-        // Configuramos la segunda dependencia clave: el codificador de contraseña
         authProvider.setPasswordEncoder(passwordEncoder());
-
         return authProvider;
     }
-    // =======================================================
-
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        // Deshabilita CSRF (ya que JWT es inmune a CSRF)
-        httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                // Define las reglas de autorización de peticiones
+        httpSecurity
+                .cors(org.springframework.security.config.Customizer.withDefaults()) // Habilita CORS
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        // Permite el acceso sin autenticar a la ruta de login/registro
-                                .requestMatchers("/auth/login", "/auth/register").permitAll()
-                        .anyRequest().authenticated()
-                )
-                // Manejo de excepciones: Usa JwtAuthenticationEntryPoint
+                        .requestMatchers("/auth/login", "/auth/register").permitAll() // Se permite acceso total a
+                                                                                      // endpoints de autenticación
+                        .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                )
-                // Gestión de sesión: No usar sesiones de estado, forzar Stateless
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        // Agrega el filtro JWT antes del filtro estándar
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
+    }
+
+    @Bean
+    public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
+        org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
+        configuration.setAllowedOrigins(java.util.Arrays.asList("http://localhost:4200")); // Origen del Frontend
+        configuration.setAllowedMethods(java.util.Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(java.util.Arrays.asList("Authorization", "Content-Type"));
+        configuration.setAllowCredentials(true);
+
+        org.springframework.web.cors.UrlBasedCorsConfigurationSource source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

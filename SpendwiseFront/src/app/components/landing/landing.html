@@ -53,8 +53,8 @@
                     Distribución de Presupuesto
                 </h3>
                 <div class="h-[300px]">
-                    <canvas baseChart [data]="pieChartData" [type]="pieChartType" [options]="pieChartOptions">
-                    </canvas>
+                    <p-chart type="pie" [data]="pieChartData" [options]="pieChartOptions" height="300px"
+                        width="100%"></p-chart>
                 </div>
             </div>
 
@@ -64,8 +64,8 @@
                     Presupuesto vs Gastos Mensuales
                 </h3>
                 <div class="h-[300px]">
-                    <canvas baseChart [data]="barChartData" [type]="barChartType" [options]="barChartOptions">
-                    </canvas>
+                    <p-chart type="bar" [data]="barChartData" [options]="barChartOptions" height="300px"
+                        width="100%"></p-chart>
                 </div>
             </div>
         </div>

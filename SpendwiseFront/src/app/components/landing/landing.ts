@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { LucideAngularModule, Wallet, PieChart, Search, Users, TrendingUp, Shield, DollarSign, BarChart3 } from 'lucide-angular';
-import { BaseChartDirective } from 'ng2-charts';
+import { ChartModule } from 'primeng/chart';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 
 @Component({
     selector: 'app-landing',
     standalone: true,
-    imports: [CommonModule, RouterLink, LucideAngularModule, BaseChartDirective],
+    imports: [CommonModule, RouterLink, LucideAngularModule, ChartModule],
     templateUrl: './landing.html',
     styleUrl: './landing.css'
 })
@@ -36,7 +36,7 @@ export class LandingComponent {
             }
         }
     };
-    public pieChartType: ChartType = 'pie';
+
     public pieChartData: ChartData<'pie', number[], string | string[]> = {
         labels: ['Vivienda', 'Alimentación', 'Transporte', 'Entretenimiento'],
         datasets: [{
@@ -61,7 +61,7 @@ export class LandingComponent {
             }
         }
     };
-    public barChartType: ChartType = 'bar';
+
     public barChartData: ChartData<'bar'> = {
         labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
         datasets: [

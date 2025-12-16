@@ -8,16 +8,25 @@
       </div>
       <div class="flex items-center">
         <ng-container *ngIf="authService.currentUser() as user; else guestLinks">
-          <span class="text-gray-600 mr-4">Hola, {{ user.username }}</span>
-          <a routerLink="/dashboard" routerLinkActive="text-indigo-600" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
-          <a routerLink="/profile" routerLinkActive="text-indigo-600" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Perfil</a>
-          <button (click)="logout()" class="ml-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200">
+          <span class="text-gray-600 mr-4"></span>
+          <a routerLink="/dashboard" routerLinkActive="text-indigo-600"
+            class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+            <i class="pi pi-shop" style="font-size: 1.5rem"></i>
+          </a>
+          <a routerLink="/profile" routerLinkActive="text-indigo-600"
+            class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+            <i class="pi pi-user" style="font-size: 1.5rem"></i>
+          </a>
+          <button (click)="logout()"
+            class="ml-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200">
             Cerrar Sesión
           </button>
         </ng-container>
         <ng-template #guestLinks>
-          <a routerLink="/login" routerLinkActive="text-indigo-600" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Iniciar Sesión</a>
-          <a routerLink="/register" routerLinkActive="text-indigo-600" class="bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-md text-sm font-medium ml-3 transition-colors duration-200">Registrarse</a>
+          <a routerLink="/login" routerLinkActive="text-indigo-600"
+            class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Iniciar Sesión</a>
+          <a routerLink="/register" routerLinkActive="text-indigo-600"
+            class="bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-md text-sm font-medium ml-3 transition-colors duration-200">Registrarse</a>
         </ng-template>
       </div>
     </div>

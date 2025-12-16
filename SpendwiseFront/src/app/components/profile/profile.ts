@@ -75,12 +75,6 @@ export class ProfileComponent {
                 return;
             }
 
-            if (this.currentPassword !== user?.password) {
-                this.error = 'La contraseña actual es incorrecta';
-                this.isLoading = false;
-                return;
-            }
-
             if (!this.newPassword) {
                 this.error = 'Ingresa una nueva contraseña';
                 this.isLoading = false;
@@ -102,17 +96,23 @@ export class ProfileComponent {
             updates.password = this.newPassword;
         }
 
-        const result = this.authService.updateProfile(updates);
-        this.isLoading = false;
-
-        if (result.success) {
-            this.success = result.message || 'Perfil actualizado correctamente';
-            this.currentPassword = '';
-            this.newPassword = '';
-            this.confirmPassword = '';
-            this.isEditing = false;
-        } else {
-            this.error = result.message || 'Error al actualizar el perfil';
-        }
+        this.authService.updateProfile(updates).subscribe({
+            next: (result) => {
+                this.isLoading = false;
+                if (result.success) {
+                    this.success = result.message || 'Perfil actualizado correctamente';
+                    this.currentPassword = '';
+                    this.newPassword = '';
+                    this.confirmPassword = '';
+                    this.isEditing = false;
+                } else {
+                    this.error = result.message || 'Error al actualizar el perfil';
+                }
+            },
+            error: () => {
+                this.isLoading = false;
+                this.error = 'Error de conexión';
+            }
+        });
     }
 }

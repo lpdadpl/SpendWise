@@ -22,15 +22,14 @@ public class ForecastTemplate {
     @Column(nullable = false)
     private String name;
 
-    private String description; // varchar
+    private String description;
 
     @Column(name = "is_public", nullable = false)
     private Boolean isPublic = false;
 
-    // Relación Many-to-One con User (owner_id en la BD)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
-    private User owner; // Usuario dueño de la plantilla
+    private User owner;
 
     @Column(columnDefinition = "TEXT")
     private String structure;
@@ -38,7 +37,6 @@ public class ForecastTemplate {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // Relación One-to-Many para "Me Gusta" (TemplateLiked)
     @OneToMany(mappedBy = "template", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TemplateLiked> likedBy;
 }

@@ -5,12 +5,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Formula;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Table(name = "app_user") // Usar 'app_user' o similar si 'user' es una palabra reservada
+@Table(name = "app_user")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,26 +32,24 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role = Role.USER; // Valor por defecto
+    private Role role = Role.USER;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // --- RELACIONES ONE-TO-MANY ---
+    // Count of followers (users who follow this user)
+    @Formula("(select count(*) from user_follow uf where uf.followed_id = id)")
+    private int followerCount;
 
-    // Transacciones que posee el usuario
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Transaction> transactions;
 
-    // Plantillas de las que es dueño el usuario (1:N, eliminamos 'template_owned')
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ForecastTemplate> ownedTemplates;
 
-    // Categorías creadas por el usuario
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Category> categories;
 
-    // Plantillas a las que el usuario ha dado "Me Gusta" (M:N)
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TemplateLiked> likedTemplates;
 }
