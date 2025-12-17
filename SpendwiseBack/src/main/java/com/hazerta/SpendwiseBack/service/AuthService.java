@@ -18,6 +18,31 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    public User updateUser(String currentUsername, com.hazerta.SpendwiseBack.dto.UpdateUserDto updates) {
+        User user = userRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        if (updates.username() != null && !updates.username().isEmpty()) {
+            if (!user.getUsername().equals(updates.username()) && userRepository.existsByUsername(updates.username())) {
+                throw new RuntimeException("El nombre de usuario ya está en uso");
+            }
+            user.setUsername(updates.username());
+        }
+
+        if (updates.email() != null && !updates.email().isEmpty()) {
+            if (!user.getEmail().equals(updates.email()) && userRepository.existsByEmail(updates.email())) {
+                throw new RuntimeException("El email ya está en uso");
+            }
+            user.setEmail(updates.email());
+        }
+
+        if (updates.password() != null && !updates.password().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(updates.password()));
+        }
+
+        return userRepository.save(user);
+    }
+
     // Mét0do para manejar el registro de un nuevo usuario
     public User registerNewUser(User user) {
 
@@ -36,5 +61,6 @@ public class AuthService {
         return userRepository.save(user);
     }
 
-    // La lógica de login se manejará en el Controller usando el AuthenticationManager
+    // La lógica de login se manejará en el Controller usando el
+    // AuthenticationManager
 }

@@ -75,4 +75,17 @@ public class AuthController {
             throw e; // Dejar que Spring Security maneje la excepción (o devolver 401 explícitamente)
         }
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<String> updateProfile(@RequestBody com.hazerta.SpendwiseBack.dto.UpdateUserDto updates) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = auth.getName();
+
+        try {
+            authService.updateUser(currentUsername, updates);
+            return new ResponseEntity<>("Perfil actualizado correctamente", HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

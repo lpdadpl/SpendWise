@@ -70,8 +70,19 @@ export class AuthService {
     }
 
     updateProfile(updates: Partial<User>): Observable<{ success: boolean; message?: string }> {
-        // Implementation pending backend support
-        return of({ success: false, message: 'Función no implementada en backend aún' });
+        return this.http.put(`${this.API_URL}/update`, updates, { responseType: 'text' }).pipe(
+            map(() => {
+                // Update local user state
+                const currentUser = this.userSubject();
+                if (currentUser) {
+                    this.userSubject.set({ ...currentUser, ...updates, password: '' });
+                }
+                return { success: true, message: 'Perfil actualizado correctamente' };
+            }),
+            catchError((error: HttpErrorResponse) => {
+                return of({ success: false, message: error.error || 'Error al actualizar el perfil' });
+            })
+        );
     }
 
     private setSession(token: string, username: string) {
