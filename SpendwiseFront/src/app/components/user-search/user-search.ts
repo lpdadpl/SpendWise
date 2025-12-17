@@ -8,11 +8,12 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 
 import { RouterLink } from '@angular/router';
+import { NavbarComponent } from '../navbar/navbar';
 
 @Component({
     selector: 'app-user-search',
     standalone: true,
-    imports: [CommonModule, FormsModule, TableModule, InputTextModule, ButtonModule, IconFieldModule, InputIconModule, RouterLink],
+    imports: [CommonModule, NavbarComponent, FormsModule, TableModule, InputTextModule, ButtonModule, IconFieldModule, InputIconModule, RouterLink],
     templateUrl: './user-search.html',
     styleUrl: './user-search.css'
 })
