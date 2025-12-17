@@ -46,6 +46,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             } catch (ExpiredJwtException e) {
                 logger.warn("El token JWT ha expirado");
                 // Podrías lanzar una excepción o configurar una respuesta específica aquí
+            } catch (io.jsonwebtoken.MalformedJwtException e) {
+                logger.warn("Token JWT malformado: " + e.getMessage());
             }
         } else {
             // Solo loguear advertencia si NO es un endpoint público de autenticación

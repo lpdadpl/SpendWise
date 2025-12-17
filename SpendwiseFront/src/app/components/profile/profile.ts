@@ -25,13 +25,13 @@ export class ProfileComponent {
     isLoading = false;
 
     constructor(public authService: AuthService) {
-        const user = this.authService.currentUser();
+        const user = this.authService.user();
         this.username = user?.username || '';
         this.email = user?.email || '';
     }
 
     handleCancel() {
-        const user = this.authService.currentUser();
+        const user = this.authService.user();
         this.username = user?.username || '';
         this.email = user?.email || '';
         this.currentPassword = '';
@@ -65,7 +65,7 @@ export class ProfileComponent {
             email: this.email.trim()
         };
 
-        const user = this.authService.currentUser();
+        const user = this.authService.user();
 
         // Si está cambiando la contraseña
         if (this.currentPassword || this.newPassword || this.confirmPassword) {

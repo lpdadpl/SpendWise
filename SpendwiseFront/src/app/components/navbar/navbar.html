@@ -7,7 +7,7 @@
         </a>
       </div>
       <div class="flex items-center">
-        <ng-container *ngIf="authService.currentUser() as user; else guestLinks">
+        <ng-container *ngIf="authService.user() as user; else guestLinks">
           <span class="text-gray-600 mr-4"></span>
           <a routerLink="/dashboard" routerLinkActive="text-indigo-600"
             class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">

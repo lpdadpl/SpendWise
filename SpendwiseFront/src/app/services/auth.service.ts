@@ -1,4 +1,4 @@
-import { Injectable, signal, inject } from '@angular/core';
+import { Injectable, signal, inject, computed } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { User } from '../models/user.model';
 import { Observable, of } from 'rxjs';
@@ -16,23 +16,26 @@ export class AuthService {
     private readonly API_URL = 'http://localhost:8080/auth';
     private http = inject(HttpClient);
 
-    currentUser = signal<User | null>(null);
-    isAuthenticated = signal<boolean>(false);
+    private userSubject = signal<User | null>(null);
+    readonly user = this.userSubject.asReadonly();
+    readonly isAuthenticated = computed(() => !!this.userSubject());
 
     constructor() {
         this.checkAuth();
     }
 
     private checkAuth() {
-        // Simple check: if token exists, we are authenticated.
-        // In a real app, we might validate the token or fetch the profile.
         const token = localStorage.getItem(this.STORAGE_KEY);
         if (token) {
-            this.isAuthenticated.set(true);
-            // Optionally decode token to get username if needed,
-            // or just set a placeholder since we don't have the user details persisted except token.
-            // For now, we leave user null or reconstruct if we stored 'user' separately.
-            // Let's assume we proceed with just knowing we are auth.
+            try {
+                // Decode token to get username (basic implementation)
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                const user: User = { username: payload.sub, email: '', password: '' };
+                this.userSubject.set(user);
+            } catch (e) {
+                console.warn("Invalid token structure", e);
+                this.logout();
+            }
         }
     }
 
@@ -62,8 +65,7 @@ export class AuthService {
     }
 
     logout() {
-        this.currentUser.set(null);
-        this.isAuthenticated.set(false);
+        this.userSubject.set(null);
         localStorage.removeItem(this.STORAGE_KEY);
     }
 
@@ -74,8 +76,7 @@ export class AuthService {
 
     private setSession(token: string, username: string) {
         localStorage.setItem(this.STORAGE_KEY, token);
-        this.isAuthenticated.set(true);
         // Minimal user info
-        this.currentUser.set({ username, email: '', password: '' });
+        this.userSubject.set({ username, email: '', password: '' });
     }
 }

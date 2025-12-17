@@ -26,7 +26,7 @@ export class TemplateService {
     constructor(private authService: AuthService) { }
 
     createTemplate(template: Omit<Template, 'id' | 'createdAt' | 'createdBy'>): { success: boolean; message?: string } {
-        const currentUser = this.authService.currentUser();
+        const currentUser = this.authService.user();
         if (!currentUser) return { success: false, message: 'No hay usuario autenticado' };
 
         const newTemplate: Template = {
@@ -44,7 +44,7 @@ export class TemplateService {
         const template = this.templates().find(t => t.id === id);
         if (!template) return { success: false, message: 'Plantilla no encontrada' };
 
-        const currentUser = this.authService.currentUser();
+        const currentUser = this.authService.user();
         if (template.createdBy !== currentUser?.username) {
             return { success: false, message: 'No tienes permiso para editar esta plantilla' };
         }
@@ -59,10 +59,12 @@ export class TemplateService {
         const template = this.templates().find(t => t.id === id);
         if (!template) return { success: false, message: 'Plantilla no encontrada' };
 
-        const currentUser = this.authService.currentUser();
+        const currentUser = this.authService.user();
         if (template.createdBy !== currentUser?.username) {
             return { success: false, message: 'No tienes permiso para eliminar esta plantilla' };
         }
+
+
 
         this.templates.update(templates => templates.filter(t => t.id !== id));
         return { success: true, message: 'Plantilla eliminada correctamente' };
