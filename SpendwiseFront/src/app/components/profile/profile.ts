@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../navbar/navbar';
@@ -6,10 +6,12 @@ import { AuthService } from '../../services/auth.service';
 import { LucideAngularModule } from 'lucide-angular';
 import { User } from '../../models/user.model';
 
+import { RouterLink } from '@angular/router';
+
 @Component({
     selector: 'app-profile',
     standalone: true,
-    imports: [CommonModule, FormsModule, NavbarComponent, LucideAngularModule],
+    imports: [CommonModule, FormsModule, NavbarComponent, LucideAngularModule, RouterLink],
     templateUrl: './profile.html',
     styleUrl: './profile.css'
 })
@@ -25,9 +27,13 @@ export class ProfileComponent {
     isLoading = false;
 
     constructor(public authService: AuthService) {
-        const user = this.authService.user();
-        this.username = user?.username || '';
-        this.email = user?.email || '';
+        effect(() => {
+            const user = this.authService.user();
+            if (user) {
+                this.username = user.username;
+                this.email = user.email;
+            }
+        });
     }
 
     handleCancel() {

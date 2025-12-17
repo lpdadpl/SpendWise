@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar';
 import { AuthService } from '../../services/auth.service';
 import { TemplateService } from '../../services/template.service';
@@ -11,7 +11,7 @@ import { LucideAngularModule } from 'lucide-angular';
 @Component({
     selector: 'app-create-template',
     standalone: true,
-    imports: [CommonModule, FormsModule, NavbarComponent, LucideAngularModule],
+    imports: [CommonModule, FormsModule, NavbarComponent, LucideAngularModule, RouterLink],
     templateUrl: './create-template.html',
     styleUrl: './create-template.css'
 })

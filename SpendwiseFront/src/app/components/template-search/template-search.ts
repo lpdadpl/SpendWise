@@ -8,10 +8,12 @@ import { TagModule } from 'primeng/tag';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 
+import { RouterLink } from '@angular/router';
+
 @Component({
     selector: 'app-template-search',
     standalone: true,
-    imports: [CommonModule, FormsModule, DataViewModule, InputTextModule, ButtonModule, TagModule, IconFieldModule, InputIconModule],
+    imports: [CommonModule, FormsModule, DataViewModule, InputTextModule, ButtonModule, TagModule, IconFieldModule, InputIconModule, RouterLink],
     templateUrl: './template-search.html',
     styleUrl: './template-search.css'
 })
