@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar';
 import { AuthService } from '../../services/auth.service';
 import { TransactionService } from '../../services/transaction.service';
-import { LucideAngularModule, FileText, Search, Users, UserCircle, Plus, TrendingUp, Wallet } from 'lucide-angular';
+import { TemplateService } from '../../services/template.service';
+import { LucideAngularModule, FileText, Search, Users, UserCircle, Plus, TrendingUp, Wallet, Eye } from 'lucide-angular';
 
 @Component({
     selector: 'app-dashboard',
@@ -15,13 +16,15 @@ import { LucideAngularModule, FileText, Search, Users, UserCircle, Plus, Trendin
 })
 export class DashboardComponent {
     transactions: any[] = [];
+    userTemplates: any[] = [];
     totalBalance: number = 0;
     isLoading = true;
 
     constructor(
         public authService: AuthService,
         private router: Router,
-        private transactionService: TransactionService
+        private transactionService: TransactionService,
+        private templateService: TemplateService
     ) { }
 
     ngOnInit() {
@@ -30,14 +33,23 @@ export class DashboardComponent {
 
     loadData() {
         this.isLoading = true;
+        // Cargar transacciones
         this.transactionService.getTransactions().subscribe({
             next: (data) => {
                 this.transactions = data;
                 this.calculateBalance();
+            },
+            error: (err) => console.error('Error loading transactions', err)
+        });
+
+        // Cargar plantillas del usuario
+        this.templateService.getUserTemplates().subscribe({
+            next: (data) => {
+                this.userTemplates = data;
                 this.isLoading = false;
             },
             error: (err) => {
-                console.error('Error loading transactions', err);
+                console.error('Error loading templates', err);
                 this.isLoading = false;
             }
         });

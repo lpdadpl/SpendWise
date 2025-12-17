@@ -12,10 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ForecastTemplateOwned {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long like_id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)

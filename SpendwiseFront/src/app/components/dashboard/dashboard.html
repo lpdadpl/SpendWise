@@ -85,6 +85,35 @@
             </div>
         </div>
 
+        <!-- My Templates Section -->
+        <div *ngIf="userTemplates.length > 0" class="mb-12">
+            <h2 class="text-2xl font-bold mb-6 text-gray-900">Mis Plantillas</h2>
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50 text-gray-600 font-medium">
+                        <tr>
+                            <th class="p-6">Nombre</th>
+                            <th class="p-6">Fecha de Creación</th>
+                            <th class="p-6 text-right">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr *ngFor="let template of userTemplates" class="hover:bg-gray-50 transition-colors">
+                            <td class="p-6 font-medium text-gray-900">{{ template.name }}</td>
+                            <td class="p-6 text-gray-600">{{ template.createdAt | date:'mediumDate' }}</td>
+                            <td class="p-6 text-right">
+                                <button (click)="navigate('/templates/' + template.id)"
+                                    class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors font-medium">
+                                    <lucide-icon name="eye" class="w-4 h-4"></lucide-icon>
+                                    Ver
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- Getting Started -->
         <div class="rounded-2xl p-8 text-white"
             style="background: linear-gradient(135deg, var(--color-primary-blue) 0%, var(--color-primary-green) 100%)">

@@ -27,10 +27,6 @@ public class ForecastTemplate {
     @Column(name = "is_public", nullable = false)
     private Boolean isPublic = false;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id", nullable = false)
-    private User owner;
-
     @Column(columnDefinition = "TEXT")
     private String structure;
 

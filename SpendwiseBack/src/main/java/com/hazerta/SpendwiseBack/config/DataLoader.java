@@ -22,6 +22,7 @@ public class DataLoader implements CommandLineRunner {
     private final TransactionRepository transactionRepository;
     private final UserFollowRepository userFollowRepository;
     private final ForecastTemplateRepository forecastTemplateRepository;
+    private final ForecastTemplateOwnedRepository forecastTemplateOwnedRepository;
     private final PasswordEncoder passwordEncoder;
 
     public DataLoader(UserRepository userRepository,
@@ -29,12 +30,14 @@ public class DataLoader implements CommandLineRunner {
             TransactionRepository transactionRepository,
             UserFollowRepository userFollowRepository,
             ForecastTemplateRepository forecastTemplateRepository,
+            ForecastTemplateOwnedRepository forecastTemplateOwnedRepository,
             PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
         this.transactionRepository = transactionRepository;
         this.userFollowRepository = userFollowRepository;
         this.forecastTemplateRepository = forecastTemplateRepository;
+        this.forecastTemplateOwnedRepository = forecastTemplateOwnedRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -63,12 +66,16 @@ public class DataLoader implements CommandLineRunner {
         template.setName("Presupuesto Mensual Básico");
         template.setDescription("Plantilla para seguimiento de gastos e ingresos recurrentes.");
         template.setIsPublic(true);
-        template.setOwner(alberto);
         template.setCreatedAt(LocalDateTime.now());
         // JSON structure as string
         template.setStructure(
                 "{\"type\": \"table\", \"rows\": [{\"name\": \"Ingresos por Salario\", \"transaction_ref_id\": null, \"transaction_type\": \"INCOME\", \"amount\": 3500.00}, {\"name\": \"Gastos en Comida\", \"transaction_ref_id\": null, \"transaction_type\": \"EXPENSE\", \"amount\": 500.00}]}");
         forecastTemplateRepository.save(template);
+
+        ForecastTemplateOwned owned = new ForecastTemplateOwned();
+        owned.setUser(alberto);
+        owned.setTemplate(template);
+        forecastTemplateOwnedRepository.save(owned);
 
         // 5. Crear User Follow (Alberto sigue a Admin)
         UserFollow follow = new UserFollow();
@@ -81,7 +88,7 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private User createOrUpdateUser(String username, String email, String password, Role role) {
-        return userRepository.findByUsername(username)
+        return userRepository.findByUsernameOrEmail(username, email)
                 .map(existingUser -> {
                     System.out.println("Actualizando usuario: " + username);
                     // Actualizar contraseña si es necesario (o siempre para desarrollo)

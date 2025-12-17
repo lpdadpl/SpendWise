@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Template } from '../models/template.model';
 import { AuthService } from './auth.service';
 
@@ -23,7 +24,18 @@ export class TemplateService {
         }
     ]);
 
-    constructor(private authService: AuthService) { }
+    constructor(
+        private http: HttpClient,
+        private authService: AuthService
+    ) { }
+
+    getUserTemplates() {
+        return this.http.get<any[]>('/api/templates/mine');
+    }
+
+    getTemplateById(id: string) {
+        return this.http.get<any>(`/api/templates/${id}`);
+    }
 
     createTemplate(template: Omit<Template, 'id' | 'createdAt' | 'createdBy'>): { success: boolean; message?: string } {
         const currentUser = this.authService.user();

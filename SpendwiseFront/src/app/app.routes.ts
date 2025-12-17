@@ -7,6 +7,7 @@ import { ProfileComponent } from './components/profile/profile';
 import { CreateTemplateComponent } from './components/create-template/create-template';
 import { UserSearchComponent } from './components/user-search/user-search';
 import { TemplateSearchComponent } from './components/template-search/template-search';
+import { TemplateViewComponent } from './components/template-view/template-view';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -17,6 +18,7 @@ export const routes: Routes = [
     { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
     { path: 'templates/new', component: CreateTemplateComponent, canActivate: [authGuard] },
     { path: 'templates/search', component: TemplateSearchComponent, canActivate: [authGuard] },
+    { path: 'templates/:id', component: TemplateViewComponent, canActivate: [authGuard] },
     { path: 'users/search', component: UserSearchComponent, canActivate: [authGuard] },
     { path: '**', redirectTo: '' }
 ];

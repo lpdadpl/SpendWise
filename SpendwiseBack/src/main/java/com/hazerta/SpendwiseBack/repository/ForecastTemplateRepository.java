@@ -9,5 +9,4 @@ import java.util.List;
 @Repository
 public interface ForecastTemplateRepository extends JpaRepository<ForecastTemplate, Long> {
 
-    List<ForecastTemplate> findByOwnerId(Long ownerId);
 }
