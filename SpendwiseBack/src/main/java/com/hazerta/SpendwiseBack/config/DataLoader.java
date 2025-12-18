@@ -49,6 +49,12 @@ public class DataLoader implements CommandLineRunner {
         // 1. Crear o Actualizar Usuarios
         User admin = createOrUpdateUser("AdminUser", "admin@spendwise.com", "EscoAdmin3001", Role.ADMIN);
         User alberto = createOrUpdateUser("AlbertoUser", "alberto@spendwise.com", "EscoAlberto3001", Role.USER);
+        User maria   = createOrUpdateUser("MariaUser", "maria@spendwise.com", "EscoMaria3001", Role.USER);
+        User juan    = createOrUpdateUser("JuanUser", "juan@spendwise.com", "EscoJuan3001", Role.USER);
+        User laura   = createOrUpdateUser("LauraUser", "laura@spendwise.com", "EscoLaura3001", Role.USER);
+        User carlos  = createOrUpdateUser("CarlosUser", "carlos@spendwise.com", "EscoCarlos3001", Role.USER);
+        User sofia   = createOrUpdateUser("SofiaUser", "sofia@spendwise.com", "EscoSofia3001", Role.USER);
+
 
         // 2. Crear Tipos de Transacción (antes Categorías) para Alberto (si no existen)
         TransactionType salarioType = createTransactionType("Salario", TransactionKind.INCOME, alberto);
