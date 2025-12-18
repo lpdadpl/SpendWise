@@ -29,7 +29,7 @@ Este proyecto sigue una arquitectura **Full-Stack** moderna, separando completam
 | **Spring Boot** | Framework para construir una API RESTful robusta y rápida. |
 | **Spring Data JPA** | Capa de persistencia para interactuar con la base de datos de manera eficiente. |
 | **Spring Security (JWT)** | Solución de seguridad basada en tokens para autenticación y autorización. |
-| **PostgreSQL ** | Sistema de gestión de bases de datos relacionales para persistencia de datos financieros. |
+| **PostgreSQL** | Sistema de gestión de bases de datos relacionales para persistencia de datos financieros. |
 
 ---
 
