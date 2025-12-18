@@ -28,12 +28,10 @@ export class AuthService {
         const token = localStorage.getItem(this.STORAGE_KEY);
         if (token) {
             try {
-                // Decode token to get username (basic implementation)
                 const payload = JSON.parse(atob(token.split('.')[1]));
                 const user: User = { username: payload.sub, email: '', password: '' };
                 this.userSubject.set(user);
             } catch (e) {
-                console.warn("Invalid token structure", e);
                 this.logout();
             }
         }
@@ -87,7 +85,6 @@ export class AuthService {
 
     private setSession(token: string, username: string) {
         localStorage.setItem(this.STORAGE_KEY, token);
-        // Minimal user info
         this.userSubject.set({ username, email: '', password: '' });
     }
 }

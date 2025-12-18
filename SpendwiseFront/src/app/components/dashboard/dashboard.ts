@@ -39,7 +39,9 @@ export class DashboardComponent {
                 this.transactions = data;
                 this.calculateBalance();
             },
-            error: (err) => console.error('Error loading transactions', err)
+            error: (err) => {
+                this.isLoading = false;
+            }
         });
 
         // Cargar plantillas del usuario
@@ -49,7 +51,6 @@ export class DashboardComponent {
                 this.isLoading = false;
             },
             error: (err) => {
-                console.error('Error loading templates', err);
                 this.isLoading = false;
             }
         });

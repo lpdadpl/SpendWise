@@ -72,7 +72,6 @@ public class DataLoader implements CommandLineRunner {
             template.setDescription("Plantilla para seguimiento de gastos e ingresos recurrentes.");
             template.setIsPublic(true);
             template.setCreatedAt(LocalDateTime.now());
-            // JSON structure as string
             template.setStructure(
                     "{\"type\": \"table\", \"rows\": [{\"name\": \"Ingresos por Salario\", \"transaction_ref_id\": null, \"transaction_type\": \"INCOME\", \"amount\": 3500.00}, {\"name\": \"Gastos en Comida\", \"transaction_ref_id\": null, \"transaction_type\": \"EXPENSE\", \"amount\": 500.00}]}");
             forecastTemplateRepository.save(template);
@@ -100,7 +99,6 @@ public class DataLoader implements CommandLineRunner {
         return userRepository.findByUsernameOrEmail(username, email)
                 .map(existingUser -> {
                     System.out.println("Actualizando usuario: " + username);
-                    // Actualizar contraseña si es necesario (o siempre para desarrollo)
                     existingUser.setPassword(passwordEncoder.encode(password));
                     existingUser.setRole(role);
                     existingUser.setEmail(email);
@@ -123,18 +121,6 @@ public class DataLoader implements CommandLineRunner {
         category.setName(name);
         category.setType(type);
         category.setUser(user);
-
-        // Evitar duplicados si ya existen las categorías (búsqueda muy simple por
-        // nombre y usuario)
-        // JPA/Hibernate manejará esto mejor si tuviéramos un método
-        // findByNameAndUser...
-        // Aquí asumimos que si el usuario ya existe, quizás las categorías también.
-        // Para simplificar en este ejemplo de DataLoader, no comprobamos duplicados
-        // exactos
-        // línea por línea salvo que JPA lo haga (no hay unique constraints explícitas
-        // en entity Category salvo ID).
-        // Pero para ser robustos:
-        // (Omitido por simplicidad, asumimos creación siempre o podrías añadir check)
         return categoryRepository.save(category);
     }
 

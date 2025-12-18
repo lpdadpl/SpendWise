@@ -12,7 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails; // Importación necesaria
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,11 +31,10 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
-
         User newUser = new User();
         newUser.setUsername(registerDto.username());
         newUser.setEmail(registerDto.email());
-        newUser.setPassword(registerDto.password()); // El servicio se encarga de hashear
+        newUser.setPassword(registerDto.password());
 
         try {
             authService.registerNewUser(newUser);
@@ -47,32 +46,19 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto) {
-        System.out.println("Intento de login para usuario: " + loginDto.username());
-
         try {
-            // 1. Autentica las credenciales
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginDto.username(),
                             loginDto.password()));
 
-            // 2. Establece la autenticación en el contexto de seguridad
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            // 3. Extrae UserDetails del objeto Authentication
             final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-            // 4. Genera el token JWT
             String token = jwtUtil.generateToken(userDetails);
 
-            System.out.println("Login exitoso para usuario: " + loginDto.username());
-
-            // 5. Retorna el token al cliente
             return new ResponseEntity<>(new AuthResponseDto(token), HttpStatus.OK);
-
         } catch (org.springframework.security.core.AuthenticationException e) {
-            System.out.println("Fallo de autenticación para usuario " + loginDto.username() + ": " + e.getMessage());
-            throw e; // Dejar que Spring Security maneje la excepción (o devolver 401 explícitamente)
+            throw e;
         }
     }
 

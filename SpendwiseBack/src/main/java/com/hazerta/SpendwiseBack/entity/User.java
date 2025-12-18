@@ -37,7 +37,6 @@ public class User {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // Count of followers (users who follow this user)
     @Formula("(select count(*) from user_follow uf where uf.followed_id = id)")
     private int followerCount;
 
