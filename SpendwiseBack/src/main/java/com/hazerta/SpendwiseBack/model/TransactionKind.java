@@ -1,6 +1,6 @@
 package com.hazerta.SpendwiseBack.model;
 
-public enum TransactionType {
+public enum TransactionKind {
     INCOME, // Ingreso
     EXPENSE // Gasto
 }

@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 import java.util.Set;
 
 @Entity
-@Table(name = "category")
+@Table(name = "transaction_type")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Category {
+public class TransactionType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,13 +21,14 @@ public class Category {
     @Column(nullable = false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String type;
+    private com.hazerta.SpendwiseBack.model.TransactionKind kind;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "transactionType", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Transaction> transactions;
 }

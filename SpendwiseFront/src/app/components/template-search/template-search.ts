@@ -21,15 +21,15 @@ import { NavbarComponent } from '../navbar/navbar';
 export class TemplateSearchComponent {
     searchTerm: string = '';
     templates = [
-        { name: 'Presupuesto Familiar', author: 'juanperez', category: 'Hogar', price: 0, rating: 4.5 },
-        { name: 'Viaje a Europa', author: 'mariagarcia', category: 'Viajes', price: 5, rating: 4.8 },
-        { name: 'Ahorro Universitario', author: 'carloslopez', category: 'Educación', price: 0, rating: 4.2 },
-        { name: 'Control de Gastos Diarios', author: 'anarui', category: 'Personal', price: 2, rating: 4.7 },
-        { name: 'Planificación de Boda', author: 'luisgonzalez', category: 'Eventos', price: 10, rating: 4.9 }
+        { name: 'Presupuesto Familiar', author: 'juanperez', transactionType: 'Hogar', price: 0, rating: 4.5 },
+        { name: 'Viaje a Europa', author: 'mariagarcia', transactionType: 'Viajes', price: 5, rating: 4.8 },
+        { name: 'Ahorro Universitario', author: 'carloslopez', transactionType: 'Educación', price: 0, rating: 4.2 },
+        { name: 'Control de Gastos Diarios', author: 'anarui', transactionType: 'Personal', price: 2, rating: 4.7 },
+        { name: 'Planificación de Boda', author: 'luisgonzalez', transactionType: 'Eventos', price: 10, rating: 4.9 }
     ];
 
-    getSeverity(category: string) {
-        switch (category) {
+    getSeverity(transactionType: string) {
+        switch (transactionType) {
             case 'Hogar': return 'success';
             case 'Viajes': return 'info';
             case 'Educación': return 'warn';

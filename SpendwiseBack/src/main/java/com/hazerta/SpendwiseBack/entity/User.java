@@ -47,7 +47,7 @@ public class User {
     private Set<ForecastTemplateOwned> ownedTemplates;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Category> categories;
+    private Set<TransactionType> transactionTypes;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TemplateLiked> likedTemplates;

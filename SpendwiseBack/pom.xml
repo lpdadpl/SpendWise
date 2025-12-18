@@ -102,17 +102,6 @@
                 <artifactId>jjwt</artifactId>
                 <version>0.9.1</version>
             </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        
         <!-- JAXB Dependency for newer Java versions -->
         <dependency>
             <groupId>javax.xml.bind</groupId>

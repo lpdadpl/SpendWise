@@ -1,8 +1,8 @@
 package com.hazerta.SpendwiseBack.service;
 
-import com.hazerta.SpendwiseBack.dto.CategoryDto;
+import com.hazerta.SpendwiseBack.dto.TransactionTypeDto;
 import com.hazerta.SpendwiseBack.entity.User;
-import com.hazerta.SpendwiseBack.repository.CategoryRepository;
+import com.hazerta.SpendwiseBack.repository.TransactionTypeRepository;
 import com.hazerta.SpendwiseBack.repository.UserRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -12,23 +12,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CategoryService {
+public class TransactionTypeService {
 
-    private final CategoryRepository categoryRepository;
+    private final TransactionTypeRepository transactionTypeRepository;
     private final UserRepository userRepository;
 
-    public CategoryService(CategoryRepository categoryRepository, UserRepository userRepository) {
-        this.categoryRepository = categoryRepository;
+    public TransactionTypeService(TransactionTypeRepository transactionTypeRepository, UserRepository userRepository) {
+        this.transactionTypeRepository = transactionTypeRepository;
         this.userRepository = userRepository;
     }
 
     @Transactional(readOnly = true)
-    public List<CategoryDto> findAllByUsername(String username) {
+    public List<TransactionTypeDto> findAllByUsername(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return categoryRepository.findByUserId(user.getId()).stream()
-                .map(c -> new CategoryDto(c.getId(), c.getName(), c.getType()))
+        return transactionTypeRepository.findByUserId(user.getId()).stream()
+                .map(tt -> new TransactionTypeDto(tt.getId(), tt.getName(), tt.getKind()))
                 .collect(Collectors.toList());
     }
 }

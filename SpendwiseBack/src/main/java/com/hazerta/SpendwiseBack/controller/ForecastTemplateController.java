@@ -1,6 +1,9 @@
 package com.hazerta.SpendwiseBack.controller;
 
+import com.hazerta.SpendwiseBack.dto.ForecastTemplateDto;
 import com.hazerta.SpendwiseBack.entity.ForecastTemplate;
+import com.hazerta.SpendwiseBack.entity.User;
+import com.hazerta.SpendwiseBack.repository.UserRepository;
 import com.hazerta.SpendwiseBack.service.ForecastTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -18,10 +21,15 @@ public class ForecastTemplateController {
     @Autowired
     private ForecastTemplateService forecastTemplateService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping("/mine")
-    public List<ForecastTemplate> getUserTemplates(Authentication authentication) {
+    public List<ForecastTemplateDto> getUserTemplates(Authentication authentication) {
         String username = authentication.getName();
-        return forecastTemplateService.getUserTemplates(username);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
+        return forecastTemplateService.getUserTemplatesByUserId(user.getId());
     }
 
     @GetMapping("/{id}")

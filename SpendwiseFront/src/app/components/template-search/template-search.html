@@ -37,8 +37,8 @@
                                     <span class="font-semibold text-gray-600">Por: {{ template.author }}</span>
                                 </div>
                                 <div class="flex align-items-center gap-2 mt-3">
-                                    <p-tag [value]="template.category"
-                                        [severity]="getSeverity(template.category)"></p-tag>
+                                    <p-tag [value]="template.transactionType"
+                                        [severity]="getSeverity(template.transactionType)"></p-tag>
                                     <span class="flex align-items-center gap-1 ml-4 text-yellow-500 font-bold">
                                         <i class="pi pi-star-fill"></i> {{ template.rating }}
                                     </span>

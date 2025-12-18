@@ -2,14 +2,14 @@ export interface Transaction {
     id: number;
     description: string;
     amount: number;
-    transactionType: 'INCOME' | 'EXPENSE';
-    categoryId: number;
-    categoryName: string;
+    transactionKind: 'INCOME' | 'EXPENSE';
+    transactionTypeId: number;
+    transactionTypeName: string;
 }
 
 export interface CreateTransactionDto {
     description: string;
     amount: number;
-    transactionType: 'INCOME' | 'EXPENSE';
-    categoryId: number;
+    transactionKind: 'INCOME' | 'EXPENSE';
+    transactionTypeId: number;
 }

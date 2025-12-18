@@ -1,16 +1,7 @@
-export interface Category {
-    id: string;
-    name: string;
-    budget: number;
-    color: string;
-}
-
-export interface Template {
-    id: string;
+export interface ForecastTemplate {
+    id: number;
     name: string;
     description: string;
-    categories: Category[];
-    totalBudget: number;
-    createdBy: string;
+    isPublic: boolean;
     createdAt: string;
 }

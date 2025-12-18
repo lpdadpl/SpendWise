@@ -34,7 +34,7 @@ export class TemplateViewComponent implements OnInit {
 
     loadTemplate(id: string) {
         this.isLoading = true;
-        this.templateService.getTemplateById(id).subscribe({
+        this.templateService.getTemplateById(Number(id)).subscribe({
             next: (data) => {
                 this.template = data;
                 try {

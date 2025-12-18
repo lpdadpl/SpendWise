@@ -6,8 +6,8 @@
             <i class="pi pi-arrow-left"></i>
             <span>Volver al Dashboard</span>
         </a>
-        <!-- Header Section -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 mt-6">
             <div>
                 <h1 class="text-3xl font-bold mb-2" style="color: var(--color-dark-blue)">Mis Plantillas</h1>
                 <p class="text-gray-600">Gestiona y visualiza tus plantillas de presupuesto</p>
@@ -20,63 +20,87 @@
             </button>
         </div>
 
-        <!-- Loading State -->
-        <div *ngIf="isLoading" class="flex justify-center items-center py-20">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-        </div>
-
-        <!-- Empty State -->
-        <div *ngIf="!isLoading && userTemplates.length === 0" class="text-center py-16 bg-white rounded-2xl shadow-sm">
-            <div class="w-20 h-20 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-6">
-                <lucide-icon name="file-text" class="w-10 h-10 text-blue-500"></lucide-icon>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">No tienes plantillas creadas</h3>
-            <p class="text-gray-500 mb-8 max-w-md mx-auto">Comienza creando tu primera plantilla para organizar tu
-                presupuesto de manera eficiente.</p>
-            <button (click)="navigate('/templates/new')"
-                class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium">
-                <lucide-icon name="plus" class="w-5 h-5"></lucide-icon>
-                Crear Mi Primera Plantilla
-            </button>
-        </div>
-
-        <!-- Templates List -->
-        <div *ngIf="!isLoading && userTemplates.length > 0" class="bg-white rounded-xl shadow-sm overflow-hidden">
-            <table class="w-full text-left">
-                <thead class="bg-gray-50 text-gray-600 font-medium border-b border-gray-100">
+        <div class="card bg-white rounded-xl shadow-sm">
+            <p-table #dt [value]="userTemplates" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+                [loading]="isLoading" [paginator]="true" [globalFilterFields]="['name', 'description']"
+                [tableStyle]="{ 'min-width': '50rem' }">
+                <ng-template #caption>
+                    <div class="flex">
+                        <p-iconfield iconPosition="left" class="ml-auto">
+                            <p-inputicon>
+                                <i class="pi pi-search"></i>
+                            </p-inputicon>
+                            <input pInputText type="text"
+                                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                                placeholder="Buscar plantilla..." />
+                        </p-iconfield>
+                    </div>
+                </ng-template>
+                <ng-template #header>
                     <tr>
-                        <th class="p-6">Nombre de la Plantilla</th>
-                        <th class="p-6 hidden md:table-cell">Fecha de Creación</th>
-                        <th class="p-6 text-right">Acciones</th>
+                        <th style="width:5%">ID</th>
+                        <th style="width:25%">Nombre</th>
+                        <th style="width:35%">Descripción</th>
+                        <th style="width:10%">Pública</th>
+                        <th style="width:15%">Fecha Creación</th>
+                        <th style="width:10%">Acciones</th>
                     </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
-                    <tr *ngFor="let template of userTemplates" class="group hover:bg-blue-50/50 transition-colors">
-                        <td class="p-6">
-                            <div class="flex items-center gap-4">
-                                <div
-                                    class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
-                                    {{ template.name.charAt(0).toUpperCase() }}
-                                </div>
-                                <span class="font-bold text-gray-900">{{ template.name }}</span>
-                            </div>
-                        </td>
-                        <td class="p-6 text-gray-600 hidden md:table-cell">
+                </ng-template>
+                <ng-template #body let-template>
+                    <tr>
+                        <td>{{ template.id }}</td>
+                        <td>
                             <div class="flex items-center gap-2">
-                                <lucide-icon name="calendar" class="w-4 h-4 text-gray-400"></lucide-icon>
-                                {{ template.createdAt | date:'mediumDate' }}
+                                <div
+                                    class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm">
+                                    {{ template.name?.charAt(0).toUpperCase() }}
+                                </div>
+                                <span class="font-semibold">{{ template.name }}</span>
                             </div>
                         </td>
-                        <td class="p-6 text-right">
-                            <button (click)="navigate('/templates/' + template.id)"
-                                class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all font-medium shadow-sm">
-                                <lucide-icon name="eye" class="w-4 h-4"></lucide-icon>
-                                Ver Detalles
-                            </button>
+                        <td>
+                            <span class="text-gray-600">{{ template.description || 'Sin descripción' }}</span>
+                        </td>
+                        <td>
+                            <p-tag [value]="template.isPublic ? 'Pública' : 'Privada'"
+                                [severity]="template.isPublic ? 'success' : 'secondary'" />
+                        </td>
+                        <td>
+                            <div class="flex items-center gap-2">
+                                <i class="pi pi-calendar text-gray-400"></i>
+                                <span>{{ template.createdAt | date:'dd/MM/yyyy' }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="flex gap-2">
+                                <button (click)="navigate('/templates/' + template.id)" pButton
+                                    class="p-button-rounded p-button-info p-button-outlined" icon="pi pi-eye"
+                                    pTooltip="Ver" tooltipPosition="top">
+                                </button>
+                                <button (click)="navigate('/templates/edit/' + template.id)" pButton
+                                    class="p-button-rounded p-button-success p-button-outlined" icon="pi pi-file-edit"
+                                    pTooltip="Editar" tooltipPosition="top">
+                                </button>
+                            </div>
                         </td>
                     </tr>
-                </tbody>
-            </table>
+                </ng-template>
+                <ng-template #emptymessage>
+                    <tr>
+                        <td colspan="6" class="text-center py-8">
+                            <div class="flex flex-col items-center gap-3">
+                                <i class="pi pi-inbox text-4xl text-gray-300"></i>
+                                <p class="text-gray-500 font-medium">No se encontraron plantillas</p>
+                                <button (click)="navigate('/templates/new')"
+                                    class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                                    <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
+                                    Crear Primera Plantilla
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>
     </div>
 </div>

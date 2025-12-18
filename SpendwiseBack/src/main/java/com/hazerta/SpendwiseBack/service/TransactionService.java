@@ -2,10 +2,10 @@ package com.hazerta.SpendwiseBack.service;
 
 import com.hazerta.SpendwiseBack.dto.CreateTransactionDto;
 import com.hazerta.SpendwiseBack.dto.TransactionDto;
-import com.hazerta.SpendwiseBack.entity.Category;
+import com.hazerta.SpendwiseBack.entity.TransactionType;
 import com.hazerta.SpendwiseBack.entity.Transaction;
 import com.hazerta.SpendwiseBack.entity.User;
-import com.hazerta.SpendwiseBack.repository.CategoryRepository;
+import com.hazerta.SpendwiseBack.repository.TransactionTypeRepository;
 import com.hazerta.SpendwiseBack.repository.TransactionRepository;
 import com.hazerta.SpendwiseBack.repository.UserRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,13 +20,13 @@ public class TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
+    private final TransactionTypeRepository transactionTypeRepository;
 
     public TransactionService(TransactionRepository transactionRepository, UserRepository userRepository,
-            CategoryRepository categoryRepository) {
+            TransactionTypeRepository transactionTypeRepository) {
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
-        this.categoryRepository = categoryRepository;
+        this.transactionTypeRepository = transactionTypeRepository;
     }
 
     @Transactional(readOnly = true)
@@ -40,15 +40,16 @@ public class TransactionService {
     @Transactional
     public TransactionDto create(String username, CreateTransactionDto dto) {
         User user = getUser(username);
-        Category category = categoryRepository.findByIdAndUserId(dto.categoryId(), user.getId())
-                .orElseThrow(() -> new RuntimeException("Category not found or access denied"));
+        TransactionType transactionType = transactionTypeRepository
+                .findByIdAndUserId(dto.transactionTypeId(), user.getId())
+                .orElseThrow(() -> new RuntimeException("Transaction Type not found or access denied"));
 
         Transaction transaction = new Transaction();
         transaction.setDescription(dto.description());
         transaction.setAmount(dto.amount());
-        transaction.setTransactionType(dto.transactionType());
+        transaction.setTransactionKind(dto.transactionKind());
         transaction.setUser(user);
-        transaction.setCategory(category);
+        transaction.setTransactionType(transactionType);
 
         Transaction saved = transactionRepository.save(transaction);
         return mapToDto(saved);
@@ -64,8 +65,8 @@ public class TransactionService {
                 t.getId(),
                 t.getDescription(),
                 t.getAmount(),
-                t.getTransactionType(),
-                t.getCategory().getId(),
-                t.getCategory().getName());
+                t.getTransactionKind(),
+                t.getTransactionType().getId(),
+                t.getTransactionType().getName());
     }
 }

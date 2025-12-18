@@ -1,6 +1,6 @@
 package com.hazerta.SpendwiseBack.entity;
 
-import com.hazerta.SpendwiseBack.model.TransactionType;
+import com.hazerta.SpendwiseBack.model.TransactionKind;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,14 +25,14 @@ public class Transaction {
     private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "transaction_type", nullable = false)
-    private TransactionType transactionType;
+    @Column(name = "transaction_kind", nullable = false)
+    private TransactionKind transactionKind;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+    @JoinColumn(name = "transaction_type_id", nullable = false)
+    private TransactionType transactionType;
 }

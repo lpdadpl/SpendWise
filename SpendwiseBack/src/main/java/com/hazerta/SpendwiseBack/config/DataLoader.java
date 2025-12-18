@@ -2,7 +2,7 @@ package com.hazerta.SpendwiseBack.config;
 
 import com.hazerta.SpendwiseBack.entity.*;
 import com.hazerta.SpendwiseBack.model.Role;
-import com.hazerta.SpendwiseBack.model.TransactionType;
+import com.hazerta.SpendwiseBack.model.TransactionKind;
 import com.hazerta.SpendwiseBack.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class DataLoader implements CommandLineRunner {
 
     private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
+    private final TransactionTypeRepository transactionTypeRepository;
     private final TransactionRepository transactionRepository;
     private final UserFollowRepository userFollowRepository;
     private final ForecastTemplateRepository forecastTemplateRepository;
@@ -26,14 +26,14 @@ public class DataLoader implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
 
     public DataLoader(UserRepository userRepository,
-            CategoryRepository categoryRepository,
+            TransactionTypeRepository transactionTypeRepository,
             TransactionRepository transactionRepository,
             UserFollowRepository userFollowRepository,
             ForecastTemplateRepository forecastTemplateRepository,
             ForecastTemplateOwnedRepository forecastTemplateOwnedRepository,
             PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.categoryRepository = categoryRepository;
+        this.transactionTypeRepository = transactionTypeRepository;
         this.transactionRepository = transactionRepository;
         this.userFollowRepository = userFollowRepository;
         this.forecastTemplateRepository = forecastTemplateRepository;
@@ -50,16 +50,16 @@ public class DataLoader implements CommandLineRunner {
         User admin = createOrUpdateUser("AdminUser", "admin@spendwise.com", "EscoAdmin3001", Role.ADMIN);
         User alberto = createOrUpdateUser("AlbertoUser", "alberto@spendwise.com", "EscoAlberto3001", Role.USER);
 
-        // 2. Crear Categorías para Alberto (si no existen)
-        Category salarioCat = createCategory("Salario", "INCOME", alberto);
-        createCategory("Alquiler", "EXPENSE", alberto);
-        Category comidaCat = createCategory("Comida", "EXPENSE", alberto);
+        // 2. Crear Tipos de Transacción (antes Categorías) para Alberto (si no existen)
+        TransactionType salarioType = createTransactionType("Salario", TransactionKind.INCOME, alberto);
+        createTransactionType("Alquiler", TransactionKind.EXPENSE, alberto);
+        TransactionType comidaType = createTransactionType("Comida", TransactionKind.EXPENSE, alberto);
 
         // 3. Crear Transacciones para Alberto
-        createTransaction("Nómina de Diciembre", new BigDecimal("3500.00"), TransactionType.INCOME, alberto,
-                salarioCat);
-        createTransaction("Compra supermercado", new BigDecimal("85.50"), TransactionType.EXPENSE, alberto, comidaCat);
-        createTransaction("Cena con amigos", new BigDecimal("45.00"), TransactionType.EXPENSE, alberto, comidaCat);
+        createTransaction("Nómina de Diciembre", new BigDecimal("3500.00"), TransactionKind.INCOME, alberto,
+                salarioType);
+        createTransaction("Compra supermercado", new BigDecimal("85.50"), TransactionKind.EXPENSE, alberto, comidaType);
+        createTransaction("Cena con amigos", new BigDecimal("45.00"), TransactionKind.EXPENSE, alberto, comidaType);
 
         // 4. Crear Plantilla de Presupuesto para Alberto
         boolean templateExists = forecastTemplateOwnedRepository.findByUser_Username(alberto.getUsername())
@@ -73,7 +73,7 @@ public class DataLoader implements CommandLineRunner {
             template.setIsPublic(true);
             template.setCreatedAt(LocalDateTime.now());
             template.setStructure(
-                    "{\"type\": \"table\", \"rows\": [{\"name\": \"Ingresos por Salario\", \"transaction_ref_id\": null, \"transaction_type\": \"INCOME\", \"amount\": 3500.00}, {\"name\": \"Gastos en Comida\", \"transaction_ref_id\": null, \"transaction_type\": \"EXPENSE\", \"amount\": 500.00}]}");
+                    "{\"type\": \"table\", \"rows\": [{\"name\": \"Ingresos por Salario\", \"transaction_ref_id\": null, \"transaction_kind\": \"INCOME\", \"amount\": 3500.00}, {\"name\": \"Gastos en Comida\", \"transaction_ref_id\": null, \"transaction_kind\": \"EXPENSE\", \"amount\": 500.00}]}");
             forecastTemplateRepository.save(template);
 
             ForecastTemplateOwned owned = new ForecastTemplateOwned();
@@ -116,22 +116,22 @@ public class DataLoader implements CommandLineRunner {
                 });
     }
 
-    private Category createCategory(String name, String type, User user) {
-        Category category = new Category();
-        category.setName(name);
-        category.setType(type);
-        category.setUser(user);
-        return categoryRepository.save(category);
+    private TransactionType createTransactionType(String name, TransactionKind kind, User user) {
+        TransactionType type = new TransactionType();
+        type.setName(name);
+        type.setKind(kind);
+        type.setUser(user);
+        return transactionTypeRepository.save(type);
     }
 
-    private void createTransaction(String description, BigDecimal amount, TransactionType type, User user,
-            Category category) {
+    private void createTransaction(String description, BigDecimal amount, TransactionKind kind, User user,
+            TransactionType transactionType) {
         Transaction transaction = new Transaction();
         transaction.setDescription(description);
         transaction.setAmount(amount);
-        transaction.setTransactionType(type);
+        transaction.setTransactionKind(kind);
         transaction.setUser(user);
-        transaction.setCategory(category);
+        transaction.setTransactionType(transactionType);
         transactionRepository.save(transaction);
     }
 }

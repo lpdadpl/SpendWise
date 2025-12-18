@@ -38,9 +38,9 @@ SELECT setval('app_user_id_seq', 2, TRUE);
 
 
 -- =======================================================
--- 2. INSERCIÓN DE CATEGORÍAS (Para el usuario Alberto - ID 2)
+-- 2. INSERCIÓN DE TIPOS DE TRANSACCIÓN (Para el usuario Alberto - ID 2)
 -- =======================================================
-INSERT INTO category (name, type, user_id)
+INSERT INTO transaction_type (name, kind, user_id)
 VALUES
 ('Salario', 'INCOME', 2),
 ('Alquiler', 'EXPENSE', 2),
@@ -50,11 +50,11 @@ VALUES
 -- =======================================================
 -- 3. INSERCIÓN DE TRANSACCIONES (Usuario Alberto - ID 2)
 -- =======================================================
-INSERT INTO transaction (description, amount, transaction_type, user_id, category_id)
+INSERT INTO app_transaction (description, amount, transaction_kind, user_id, transaction_type_id)
 VALUES
-('Nómina de Diciembre', 3500.00, 'INCOME', 2, (SELECT id FROM category WHERE name = 'Salario' AND user_id = 2)),
-('Compra supermercado', 85.50, 'EXPENSE', 2, (SELECT id FROM category WHERE name = 'Comida' AND user_id = 2)),
-('Cena con amigos', 45.00, 'EXPENSE', 2, (SELECT id FROM category WHERE name = 'Comida' AND user_id = 2));
+('Nómina de Diciembre', 3500.00, 'INCOME', 2, (SELECT id FROM transaction_type WHERE name = 'Salario' AND user_id = 2)),
+('Compra supermercado', 85.50, 'EXPENSE', 2, (SELECT id FROM transaction_type WHERE name = 'Comida' AND user_id = 2)),
+('Cena con amigos', 45.00, 'EXPENSE', 2, (SELECT id FROM transaction_type WHERE name = 'Comida' AND user_id = 2));
 
 
 -- =======================================================
@@ -68,5 +68,5 @@ VALUES
     TRUE,
     2, -- owner_id = Alberto
     NOW(),
-    '{"type": "table", "rows": [{"name": "Ingresos por Salario", "transaction_ref_id": null, "transaction_type": "INCOME", "amount": 3500.00}, {"name": "Gastos en Comida", "transaction_ref_id": null, "transaction_type": "EXPENSE", "amount": 500.00}]}'
+    '{"type": "table", "rows": [{"name": "Ingresos por Salario", "transaction_ref_id": null, "transaction_kind": "INCOME", "amount": 3500.00}, {"name": "Gastos en Comida", "transaction_ref_id": null, "transaction_kind": "EXPENSE", "amount": 500.00}]}'
 );
