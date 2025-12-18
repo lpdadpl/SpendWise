@@ -62,20 +62,29 @@ public class DataLoader implements CommandLineRunner {
         createTransaction("Cena con amigos", new BigDecimal("45.00"), TransactionType.EXPENSE, alberto, comidaCat);
 
         // 4. Crear Plantilla de Presupuesto para Alberto
-        ForecastTemplate template = new ForecastTemplate();
-        template.setName("Presupuesto Mensual Básico");
-        template.setDescription("Plantilla para seguimiento de gastos e ingresos recurrentes.");
-        template.setIsPublic(true);
-        template.setCreatedAt(LocalDateTime.now());
-        // JSON structure as string
-        template.setStructure(
-                "{\"type\": \"table\", \"rows\": [{\"name\": \"Ingresos por Salario\", \"transaction_ref_id\": null, \"transaction_type\": \"INCOME\", \"amount\": 3500.00}, {\"name\": \"Gastos en Comida\", \"transaction_ref_id\": null, \"transaction_type\": \"EXPENSE\", \"amount\": 500.00}]}");
-        forecastTemplateRepository.save(template);
+        boolean templateExists = forecastTemplateOwnedRepository.findByUser_Username(alberto.getUsername())
+                .stream()
+                .anyMatch(o -> "Presupuesto Mensual Básico".equals(o.getTemplate().getName()));
 
-        ForecastTemplateOwned owned = new ForecastTemplateOwned();
-        owned.setUser(alberto);
-        owned.setTemplate(template);
-        forecastTemplateOwnedRepository.save(owned);
+        if (!templateExists) {
+            ForecastTemplate template = new ForecastTemplate();
+            template.setName("Presupuesto Mensual Básico");
+            template.setDescription("Plantilla para seguimiento de gastos e ingresos recurrentes.");
+            template.setIsPublic(true);
+            template.setCreatedAt(LocalDateTime.now());
+            // JSON structure as string
+            template.setStructure(
+                    "{\"type\": \"table\", \"rows\": [{\"name\": \"Ingresos por Salario\", \"transaction_ref_id\": null, \"transaction_type\": \"INCOME\", \"amount\": 3500.00}, {\"name\": \"Gastos en Comida\", \"transaction_ref_id\": null, \"transaction_type\": \"EXPENSE\", \"amount\": 500.00}]}");
+            forecastTemplateRepository.save(template);
+
+            ForecastTemplateOwned owned = new ForecastTemplateOwned();
+            owned.setUser(alberto);
+            owned.setTemplate(template);
+            forecastTemplateOwnedRepository.save(owned);
+            System.out.println("Plantilla 'Presupuesto Mensual Básico' creada para " + alberto.getUsername());
+        } else {
+            System.out.println("La plantilla 'Presupuesto Mensual Básico' ya existe para " + alberto.getUsername());
+        }
 
         // 5. Crear User Follow (Alberto sigue a Admin)
         UserFollow follow = new UserFollow();
