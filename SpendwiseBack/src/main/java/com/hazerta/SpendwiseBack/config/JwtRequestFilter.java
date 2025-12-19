@@ -31,6 +31,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         final String requestTokenHeader = request.getHeader("Authorization");
 
+        // DEBUG: Imprimir la URL y el header
+        System.out.println("Procesando petición: " + request.getRequestURI());
+        System.out.println("Cabecera de autorización: " + requestTokenHeader);
+
         String username = null;
         String jwtToken = null;
 
@@ -38,28 +42,43 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             jwtToken = requestTokenHeader.substring(7);
             try {
                 username = jwtUtil.extractUsername(jwtToken);
+                System.out.println("Usuario extraído del token: " + username);
             } catch (IllegalArgumentException e) {
-                logger.warn("No se pudo obtener el token JWT");
+                System.out.println("No se puede obtener el token JWT");
             } catch (ExpiredJwtException e) {
-                logger.warn("El token JWT ha expirado");
+                System.out.println("El token JWT ha expirado");
             } catch (io.jsonwebtoken.MalformedJwtException e) {
-                logger.warn("Token JWT malformado: " + e.getMessage());
+                System.out.println("Token JWT mal formado: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Error genérico de JWT: " + e.getMessage());
+                e.printStackTrace();
             }
         } else {
             if (!request.getRequestURI().startsWith("/auth/")) {
-                logger.warn("El token JWT no comienza con 'Bearer String' o no está presente.");
+                logger.warn("El token JWT no comienza con la cadena Bearer o falta");
             }
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            System.out.println("SecurityContext está vacío, intentando autenticación para: " + username);
             UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
 
-            if (jwtUtil.validateToken(jwtToken, userDetails)) {
+            boolean isValid = jwtUtil.validateToken(jwtToken, userDetails);
+            System.out.println("¿Es válido el token? " + isValid);
+
+            if (isValid) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken
                         .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                System.out.println("Autenticación establecida con éxito en SecurityContext para: " + username);
+            } else {
+                System.out.println("Fallo en la validación del token para el usuario: " + username);
+            }
+        } else {
+            if (username != null) {
+                System.out.println("Usuario encontrado pero SecurityContext ya tiene autenticación");
             }
         }
 

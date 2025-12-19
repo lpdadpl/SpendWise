@@ -66,6 +66,15 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public org.springframework.boot.web.servlet.FilterRegistrationBean<JwtRequestFilter> filterRegistrationBean(
+            JwtRequestFilter filter) {
+        org.springframework.boot.web.servlet.FilterRegistrationBean<JwtRequestFilter> registrationBean = new org.springframework.boot.web.servlet.FilterRegistrationBean<>(
+                filter);
+        registrationBean.setEnabled(false);
+        return registrationBean;
+    }
+
+    @Bean
     public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
         org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
         configuration.setAllowedOrigins(java.util.Arrays.asList("http://localhost:4200"));

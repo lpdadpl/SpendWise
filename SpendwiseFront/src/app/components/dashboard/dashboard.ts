@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar';
 import { AuthService } from '../../services/auth.service';
 import { TransactionService } from '../../services/transaction.service';
@@ -10,7 +10,7 @@ import { LucideAngularModule, FileText, Search, Users, UserCircle, Plus, Trendin
 @Component({
     selector: 'app-dashboard',
     standalone: true,
-    imports: [CommonModule, NavbarComponent, LucideAngularModule],
+    imports: [CommonModule, NavbarComponent, LucideAngularModule, RouterModule],
     templateUrl: './dashboard.html',
     styleUrl: './dashboard.css'
 })
