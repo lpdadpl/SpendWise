@@ -49,12 +49,11 @@ public class DataLoader implements CommandLineRunner {
         // 1. Crear o Actualizar Usuarios
         User admin = createOrUpdateUser("AdminUser", "admin@spendwise.com", "EscoAdmin3001", Role.ADMIN);
         User alberto = createOrUpdateUser("AlbertoUser", "alberto@spendwise.com", "EscoAlberto3001", Role.USER);
-        User maria   = createOrUpdateUser("MariaUser", "maria@spendwise.com", "EscoMaria3001", Role.USER);
-        User juan    = createOrUpdateUser("JuanUser", "juan@spendwise.com", "EscoJuan3001", Role.USER);
-        User laura   = createOrUpdateUser("LauraUser", "laura@spendwise.com", "EscoLaura3001", Role.USER);
-        User carlos  = createOrUpdateUser("CarlosUser", "carlos@spendwise.com", "EscoCarlos3001", Role.USER);
-        User sofia   = createOrUpdateUser("SofiaUser", "sofia@spendwise.com", "EscoSofia3001", Role.USER);
-
+        User maria = createOrUpdateUser("MariaUser", "maria@spendwise.com", "EscoMaria3001", Role.USER);
+        User juan = createOrUpdateUser("JuanUser", "juan@spendwise.com", "EscoJuan3001", Role.USER);
+        User laura = createOrUpdateUser("LauraUser", "laura@spendwise.com", "EscoLaura3001", Role.USER);
+        User carlos = createOrUpdateUser("CarlosUser", "carlos@spendwise.com", "EscoCarlos3001", Role.USER);
+        User sofia = createOrUpdateUser("SofiaUser", "sofia@spendwise.com", "EscoSofia3001", Role.USER);
 
         // 2. Crear Tipos de Transacción (antes Categorías) para Alberto (si no existen)
         TransactionType salarioType = createTransactionType("Salario", TransactionKind.INCOME, alberto);
@@ -86,9 +85,7 @@ public class DataLoader implements CommandLineRunner {
             owned.setUser(alberto);
             owned.setTemplate(template);
             forecastTemplateOwnedRepository.save(owned);
-            System.out.println("Plantilla 'Presupuesto Mensual Básico' creada para " + alberto.getUsername());
-        } else {
-            System.out.println("La plantilla 'Presupuesto Mensual Básico' ya existe para " + alberto.getUsername());
+
         }
 
         // 5. Crear User Follow (Alberto sigue a Admin)
@@ -104,7 +101,6 @@ public class DataLoader implements CommandLineRunner {
     private User createOrUpdateUser(String username, String email, String password, Role role) {
         return userRepository.findByUsernameOrEmail(username, email)
                 .map(existingUser -> {
-                    System.out.println("Actualizando usuario: " + username);
                     existingUser.setPassword(passwordEncoder.encode(password));
                     existingUser.setRole(role);
                     existingUser.setEmail(email);
