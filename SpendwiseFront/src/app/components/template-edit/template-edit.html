@@ -1,0 +1,58 @@
+<div class="min-h-screen bg-gray-50">
+    <app-navbar></app-navbar>
+
+    <div class="container mx-auto px-4 py-8 max-w-2xl">
+        <!-- Header -->
+        <div class="mb-8">
+            <button pButton label="Volver a Plantillas" icon="pi pi-arrow-left" class="p-button-text mb-4"
+                (click)="onCancel()"></button>
+
+            <h1 class="text-3xl font-bold text-gray-900">Editar Plantilla</h1>
+            <p class="text-gray-600">Modifica los detalles de tu plantilla</p>
+        </div>
+
+        <!-- Loading State -->
+        <!--         <div *ngIf="isLoading" class="flex justify-center py-12">
+            <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+        </div> -->
+
+        <!-- Error State -->
+        <div *ngIf="error" class="bg-red-50 text-red-700 p-4 rounded-lg mb-8 border border-red-200">
+            <div class="flex items-center gap-2">
+                <i class="pi pi-exclamation-circle"></i>
+                <span>{{ error }}</span>
+            </div>
+        </div>
+
+        <!-- Edit Form -->
+        <p-card *ngIf="!isLoading && template" styleClass="shadow-sm">
+            <!--         <p-card *ngIf="!isLoading && template" styleClass="shadow-sm"> -->
+            <form (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
+
+                <div class="flex flex-col gap-2">
+                    <label htmlFor="name" class="font-medium text-gray-700">Nombre de la Plantilla</label>
+                    <input pInputText id="name" [(ngModel)]="name" name="name" class="w-full"
+                        placeholder="Ej: Presupuesto Mensual" required />
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label htmlFor="description" class="font-medium text-gray-700">Descripción</label>
+                    <textarea pInputTextarea id="description" [(ngModel)]="description" name="description" rows="4"
+                        class="w-full" placeholder="Describe el propósito de esta plantilla..." required></textarea>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <p-checkbox [(ngModel)]="isPublic" name="isPublic" [binary]="true" inputId="isPublic"></p-checkbox>
+                    <label htmlFor="isPublic" class="text-gray-700 cursor-pointer">Hacer pública esta plantilla</label>
+                </div>
+
+                <div class="flex justify-end gap-3 mt-4">
+                    <button pButton type="button" label="Cancelar" class="p-button-outlined p-button-secondary"
+                        (click)="onCancel()" [disabled]="isSaving"></button>
+                    <button pButton type="submit" label="Guardar Cambios" icon="pi pi-check"
+                        [loading]="isSaving"></button>
+                </div>
+            </form>
+        </p-card>
+    </div>
+</div>

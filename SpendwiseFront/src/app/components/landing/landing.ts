@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { LucideAngularModule, Wallet, PieChart, Search, Users, TrendingUp, Shield, DollarSign, BarChart3 } from 'lucide-angular';
 import { ChartModule } from 'primeng/chart';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
     selector: 'app-landing',
@@ -12,7 +13,18 @@ import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
     templateUrl: './landing.html',
     styleUrl: './landing.css'
 })
-export class LandingComponent {
+export class LandingComponent implements OnInit {
+    constructor(
+        private authService: AuthService,
+        private router: Router
+    ) { }
+
+    ngOnInit() {
+        if (this.authService.isAuthenticated()) {
+            this.router.navigate(['/dashboard']);
+        }
+    }
+
     // Pie Chart Data
     public pieChartOptions: ChartConfiguration['options'] = {
         responsive: true,

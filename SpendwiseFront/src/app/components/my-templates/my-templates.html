@@ -1,29 +1,29 @@
 <div class="min-h-screen bg-gray-50">
     <app-navbar></app-navbar>
     <div class="container mx-auto px-4 py-8">
-        <a routerLink="/dashboard"
-            class="flex items-center gap-2 px-4 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg transition-all transform hover:scale-105 hover:text-blue-600 hover:border-blue-300 hover:shadow-md cursor-pointer">
-            <i class="pi pi-arrow-left"></i>
-            <span>Volver al Dashboard</span>
-        </a>
 
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 mt-6">
             <div>
                 <h1 class="text-3xl font-bold mb-2" style="color: var(--color-dark-blue)">Mis Plantillas</h1>
                 <p class="text-gray-600">Gestiona y visualiza tus plantillas de presupuesto</p>
             </div>
-            <button (click)="navigate('/templates/new')"
-                class="flex items-center justify-center gap-2 px-6 py-3 text-white rounded-xl transition-all hover:opacity-90 hover:shadow-lg hover:-translate-y-0.5"
-                style="background-color: var(--color-primary-green)">
-                <lucide-icon name="plus" class="w-5 h-5"></lucide-icon>
-                <span class="font-bold">Nueva Plantilla</span>
-            </button>
+            <a routerLink="/dashboard"
+                class="flex items-center gap-2 px-4 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg transition-all transform hover:scale-105 hover:text-blue-600 hover:border-blue-300 hover:shadow-md cursor-pointer">
+                <i class="pi pi-arrow-left"></i>
+                <span>Volver al Dashboard</span>
+            </a>
         </div>
+        <button (click)="navigate('/templates/new')"
+            class="flex items-center justify-center gap-2 px-6 py-3 text-white rounded-xl transition-all hover:opacity-90 hover:shadow-lg hover:-translate-y-0.5"
+            style="background-color: var(--color-primary-green)">
+            <lucide-icon name="plus" class="w-5 h-5"></lucide-icon>
+            <span class="font-bold">Nueva Plantilla</span>
+        </button>
 
         <div class="card bg-white rounded-xl shadow-sm">
             <p-table #dt [value]="userTemplates" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
                 [loading]="isLoading" [paginator]="true" [globalFilterFields]="['name', 'description']"
-                [tableStyle]="{ 'min-width': '50rem' }">
+                styleClass="w-full">
                 <ng-template #caption>
                     <div class="flex">
                         <p-iconfield iconPosition="left" class="ml-auto">
@@ -38,17 +38,17 @@
                 </ng-template>
                 <ng-template #header>
                     <tr>
-                        <th style="width:5%">ID</th>
+                        <th style="width:5%" class="hidden md:table-cell">ID</th>
                         <th style="width:25%">Nombre</th>
                         <th style="width:35%">Descripción</th>
-                        <th style="width:10%">Pública</th>
-                        <th style="width:15%">Fecha Creación</th>
+                        <th style="width:10%" class="hidden md:table-cell">Pública</th>
+                        <th style="width:15%" class="hidden md:table-cell">Fecha Creación</th>
                         <th style="width:10%">Acciones</th>
                     </tr>
                 </ng-template>
                 <ng-template #body let-template>
                     <tr>
-                        <td>{{ template.id }}</td>
+                        <td class="hidden md:table-cell">{{ template.id }}</td>
                         <td>
                             <div class="flex items-center gap-2">
                                 <div
@@ -61,11 +61,11 @@
                         <td>
                             <span class="text-gray-600">{{ template.description || 'Sin descripción' }}</span>
                         </td>
-                        <td>
+                        <td class="hidden md:table-cell">
                             <p-tag [value]="template.isPublic ? 'Pública' : 'Privada'"
                                 [severity]="template.isPublic ? 'success' : 'secondary'" />
                         </td>
-                        <td>
+                        <td class="hidden md:table-cell">
                             <div class="flex items-center gap-2">
                                 <i class="pi pi-calendar text-gray-400"></i>
                                 <span>{{ template.createdAt | date:'dd/MM/yyyy' }}</span>

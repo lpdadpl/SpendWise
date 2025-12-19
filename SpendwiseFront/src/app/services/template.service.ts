@@ -23,4 +23,8 @@ export class TemplateService {
     getTemplateById(id: number) {
         return this.http.get<any>(`${this.API_URL}/${id}`);
     }
+
+    updateTemplate(id: number, template: Partial<ForecastTemplate>) {
+        return this.http.put<ForecastTemplate>(`${this.API_URL}/${id}`, template);
+    }
 }

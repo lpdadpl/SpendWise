@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar';
@@ -40,7 +40,8 @@ export class MyTemplatesComponent implements OnInit {
     constructor(
         private templateService: TemplateService,
         private router: Router,
-        public authService: AuthService
+        public authService: AuthService,
+        private cd: ChangeDetectorRef
     ) { }
 
     ngOnInit() {
@@ -53,9 +54,11 @@ export class MyTemplatesComponent implements OnInit {
             next: (data) => {
                 this.userTemplates = data;
                 this.isLoading = false;
+                this.cd.detectChanges();
             },
             error: (err) => {
                 this.isLoading = false;
+                this.cd.detectChanges();
             }
         });
     }
