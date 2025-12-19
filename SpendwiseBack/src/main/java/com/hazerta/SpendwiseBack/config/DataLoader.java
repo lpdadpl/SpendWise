@@ -107,7 +107,6 @@ public class DataLoader implements CommandLineRunner {
                     return userRepository.save(existingUser);
                 })
                 .orElseGet(() -> {
-                    System.out.println("Creando usuario: " + username);
                     User newUser = new User();
                     newUser.setUsername(username);
                     newUser.setEmail(email);
