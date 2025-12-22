@@ -94,4 +94,23 @@ public class ForecastTemplateService {
 
         return forecastTemplateRepository.save(template);
     }
+
+    @Transactional
+    public void deleteTemplate(Long id, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
+
+        // Check ownership
+        ForecastTemplateOwned ownership = forecastTemplateOwnedRepository.findByUser_Id(user.getId())
+                .stream()
+                .filter(owned -> owned.getTemplate().getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("User not authorized to delete this template"));
+
+        // Delete ownership first
+        forecastTemplateOwnedRepository.delete(ownership);
+
+        // Delete template
+        forecastTemplateRepository.deleteById(id);
+    }
 }

@@ -80,6 +80,10 @@
                                     icon="pi pi-file-edit" pTooltip="Editar" tooltipPosition="top"
                                     (click)="navigate('/templates/edit/' + template.id)">
                                 </button>
+                                <button pButton class="p-button-rounded p-button-danger p-button-outlined"
+                                    icon="pi pi-trash" pTooltip="Eliminar" tooltipPosition="top"
+                                    (click)="deleteTemplate(template.id)">
+                                </button>
                             </div>
                         </td>
                     </tr>

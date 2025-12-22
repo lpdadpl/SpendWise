@@ -50,4 +50,9 @@ public class ForecastTemplateController {
             Authentication authentication) {
         return forecastTemplateService.updateTemplate(id, template, authentication.getName());
     }
+
+    @org.springframework.web.bind.annotation.DeleteMapping("/{id}")
+    public void deleteTemplate(@PathVariable Long id, Authentication authentication) {
+        forecastTemplateService.deleteTemplate(id, authentication.getName());
+    }
 }

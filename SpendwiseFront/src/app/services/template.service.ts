@@ -31,4 +31,8 @@ export class TemplateService {
     updateTemplate(id: number, template: Partial<ForecastTemplate>) {
         return this.http.put<ForecastTemplate>(`${this.API_URL}/${id}`, template);
     }
+
+    deleteTemplate(id: number) {
+        return this.http.delete<void>(`${this.API_URL}/${id}`);
+    }
 }

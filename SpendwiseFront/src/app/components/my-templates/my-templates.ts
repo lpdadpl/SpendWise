@@ -66,4 +66,17 @@ export class MyTemplatesComponent implements OnInit {
     navigate(path: string) {
         this.router.navigate([path]);
     }
+
+    deleteTemplate(id: number) {
+        if (confirm('¿Estás seguro de que deseas eliminar esta plantilla?')) {
+            this.templateService.deleteTemplate(id).subscribe({
+                next: () => {
+                    this.loadTemplates();
+                },
+                error: (err) => {
+                    console.error('Error deleting template', err);
+                }
+            });
+        }
+    }
 }
