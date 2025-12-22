@@ -23,8 +23,7 @@ export class CreateTemplateComponent {
 
     // Rows logic
     rows: TemplateRow[] = [
-        { name: 'Sueldo', transaction_ref_id: null, transaction_kind: 'INCOME', amount: 0 },
-        { name: 'Alquiler', transaction_ref_id: null, transaction_kind: 'EXPENSE', amount: 0 }
+        { name: '', transaction_ref_id: null, transaction_kind: 'INCOME', amount: 0 }
     ];
 
     isPublic = false;
@@ -52,6 +51,23 @@ export class CreateTemplateComponent {
         if (this.rows.length > 1) {
             this.rows.splice(index, 1);
         }
+    }
+
+    validateNumberInput(event: any, index: number) {
+        const input = event.target as HTMLInputElement;
+        let value = input.value;
+
+        // Remove any non-numeric and non-decimal characters
+        value = value.replace(/[^0-9.]/g, '');
+
+        // Ensure only one decimal point
+        const parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+
+        input.value = value;
+        this.rows[index].amount = parseFloat(value) || 0;
     }
 
     handleSubmit() {

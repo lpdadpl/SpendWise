@@ -53,6 +53,20 @@
                             placeholder="Describe el propósito de esta plantilla..." [disabled]="isLoading"
                             required></textarea>
                     </div>
+
+                    <div class="mt-4 flex items-center gap-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                        <div class="flex items-center h-5">
+                            <input id="isPublic" name="isPublic" type="checkbox" [(ngModel)]="isPublic"
+                                class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer">
+                        </div>
+                        <div class="ml-2">
+                            <label for="isPublic" class="font-medium text-gray-700 cursor-pointer select-none">Plantilla
+                                Pública</label>
+                            <p class="text-xs text-gray-500">Si se marca, otros usuarios podrán ver y usar esta
+                                plantilla
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -93,9 +107,10 @@
 
                         <div class="w-full md:w-40">
                             <label class="block text-xs font-semibold text-gray-500 mb-1">Monto Estimado</label>
-                            <input type="number" [(ngModel)]="row.amount" [name]="'row_amount_' + i"
+                            <input type="text" [value]="row.amount" [name]="'row_amount_' + i"
+                                (input)="validateNumberInput($event, i)"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="0.00" min="0" required />
+                                placeholder="0.00" required />
                         </div>
 
                         <button type="button" (click)="removeItem(i)"
