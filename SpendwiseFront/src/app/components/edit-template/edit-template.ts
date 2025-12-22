@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
@@ -37,7 +37,8 @@ export class EditTemplateComponent implements OnInit {
         private authService: AuthService,
         private templateService: TemplateService,
         private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private cd: ChangeDetectorRef
     ) { }
 
     ngOnInit() {
@@ -48,6 +49,7 @@ export class EditTemplateComponent implements OnInit {
                 this.loadTemplate(this.templateId);
             } else {
                 this.error = 'No se proporcionó un ID de plantilla válido.';
+                this.cd.detectChanges();
             }
         });
     }
@@ -78,11 +80,13 @@ export class EditTemplateComponent implements OnInit {
                     }
                 }
                 this.isLoading = false;
+                this.cd.detectChanges();
             },
             error: (err) => {
                 console.error(err);
                 this.error = 'Error al cargar la plantilla.';
                 this.isLoading = false;
+                this.cd.detectChanges();
             }
         });
     }
@@ -150,6 +154,7 @@ export class EditTemplateComponent implements OnInit {
             next: () => {
                 this.success = true;
                 this.isLoading = false;
+                this.cd.detectChanges();
                 setTimeout(() => {
                     this.router.navigate(['/templates']);
                 }, 1500);
@@ -158,6 +163,7 @@ export class EditTemplateComponent implements OnInit {
                 console.error(err);
                 this.error = 'Error al actualizar la plantilla';
                 this.isLoading = false;
+                this.cd.detectChanges();
             }
         });
     }
