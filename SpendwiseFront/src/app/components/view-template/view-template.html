@@ -82,13 +82,13 @@
                                 <td class="pl-6 font-medium text-gray-700">{{ row.name }}</td>
                                 <td>
                                     <span
-                                        [class]="row.transaction_type === 'INCOME' 
+                                        [class]="row.transaction_kind === 'INCOME' 
                                         ? 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700' 
                                         : 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700'">
                                         <span class="w-1.5 h-1.5 rounded-full"
-                                            [class]="row.transaction_type === 'INCOME' ? 'bg-green-500' : 'bg-red-500'">
+                                            [class]="row.transaction_kind === 'INCOME' ? 'bg-green-500' : 'bg-red-500'">
                                         </span>
-                                        {{ row.transaction_type === 'INCOME' ? 'INGRESO' : 'GASTO' }}
+                                        {{ row.transaction_kind === 'INCOME' ? 'INGRESO' : 'GASTO' }}
                                     </span>
                                 </td>
                                 <td class="pr-6 text-right font-mono text-gray-800 font-semibold text-lg">
@@ -107,6 +107,28 @@
                             </tr>
                         </ng-template>
                     </p-table>
+                </div>
+
+                <!-- Balance Total Section -->
+                <div class="mt-8 flex justify-end">
+                    <div class="bg-gray-50 rounded-xl p-6 border border-gray-100 min-w-[300px] shadow-sm">
+                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Balance Estimado
+                            Total</h4>
+                        <div class="flex items-center justify-between">
+                            <div class="p-2 rounded-lg" [ngClass]="totalBalance >= 0 ? 'bg-green-100' : 'bg-red-100'">
+                                <lucide-icon [name]="totalBalance >= 0 ? 'trending-up' : 'trending-down'"
+                                    [class]="totalBalance >= 0 ? 'text-green-600' : 'text-red-600'"
+                                    class="w-6 h-6"></lucide-icon>
+                            </div>
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-3xl font-bold font-mono"
+                                    [ngClass]="totalBalance >= 0 ? 'text-green-600' : 'text-red-600'">
+                                    {{ totalBalance | currency:'EUR':'symbol':'1.2-2' }}
+                                </span>
+                                <span class="text-sm font-medium text-gray-400">EUR</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
