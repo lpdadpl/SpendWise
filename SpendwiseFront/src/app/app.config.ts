@@ -6,7 +6,7 @@ import Aura from '@primeng/themes/aura';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
-import { LucideAngularModule, Wallet, PieChart, Search, Users, TrendingUp, Shield, DollarSign, BarChart3, Menu, X, Check, CheckCircle, AlertCircle, User, Mail, Lock, Plus, UserCircle, FileText, Trash2, Sheet, Table, ArrowLeft, Edit, Settings, Save } from 'lucide-angular';
+import { LucideAngularModule, Wallet, PieChart, Search, Users, TrendingUp, Shield, DollarSign, BarChart3, Menu, X, Check, CheckCircle, AlertCircle, User, Mail, Lock, Plus, UserCircle, FileText, Trash2, Sheet, Table, ArrowLeft, Edit, Settings, Save, Globe, Calendar, Layout } from 'lucide-angular';
 import { authInterceptor } from './interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
@@ -22,6 +22,6 @@ export const appConfig: ApplicationConfig = {
         }
       }
     }),
-    importProvidersFrom(LucideAngularModule.pick({ Wallet, PieChart, Search, Users, TrendingUp, Shield, DollarSign, BarChart3, Menu, X, Check, CheckCircle, AlertCircle, User, Mail, Lock, Plus, UserCircle, FileText, Trash2, Sheet, Table, ArrowLeft, Edit, Settings, Save }))
+    importProvidersFrom(LucideAngularModule.pick({ Wallet, PieChart, Search, Users, TrendingUp, Shield, DollarSign, BarChart3, Menu, X, Check, CheckCircle, AlertCircle, User, Mail, Lock, Plus, UserCircle, FileText, Trash2, Sheet, Table, ArrowLeft, Edit, Settings, Save, Globe, Calendar, Layout }))
   ]
 };

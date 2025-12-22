@@ -8,6 +8,7 @@ import { CreateTemplateComponent } from './components/create-template/create-tem
 import { UserSearchComponent } from './components/user-search/user-search';
 import { TemplateSearchComponent } from './components/template-search/template-search';
 import { MyTemplatesComponent } from './components/my-templates/my-templates';
+import { ViewTemplateComponent } from './components/view-template/view-template';
 import { authGuard } from './guards/auth.guard';
 import { adminGuard } from './guards/admin.guard';
 
@@ -20,6 +21,7 @@ export const routes: Routes = [
     { path: 'templates', component: MyTemplatesComponent, canActivate: [authGuard] },
     { path: 'templates/new', component: CreateTemplateComponent, canActivate: [authGuard] },
     { path: 'templates/edit/:id', loadComponent: () => import('./components/edit-template/edit-template').then(m => m.EditTemplateComponent), canActivate: [authGuard] },
+    { path: 'templates/view/:id', component: ViewTemplateComponent, canActivate: [authGuard] },
     { path: 'templates/search', component: TemplateSearchComponent, canActivate: [authGuard] },
     { path: 'users/search', component: UserSearchComponent, canActivate: [authGuard] },
     { path: 'admin', loadComponent: () => import('./components/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent), canActivate: [adminGuard] },

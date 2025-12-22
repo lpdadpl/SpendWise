@@ -74,7 +74,8 @@
                         <td>
                             <div class="flex gap-2">
                                 <button pButton class="p-button-rounded p-button-info p-button-outlined"
-                                    icon="pi pi-eye" pTooltip="Ver" tooltipPosition="top">
+                                    icon="pi pi-eye" pTooltip="Ver" tooltipPosition="top"
+                                    (click)="navigate('/templates/view/' + template.id)">
                                 </button>
                                 <button pButton class="p-button-rounded p-button-success p-button-outlined"
                                     icon="pi pi-file-edit" pTooltip="Editar" tooltipPosition="top"
