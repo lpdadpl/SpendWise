@@ -19,6 +19,7 @@ export const routes: Routes = [
     { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
     { path: 'templates', component: MyTemplatesComponent, canActivate: [authGuard] },
     { path: 'templates/new', component: CreateTemplateComponent, canActivate: [authGuard] },
+    { path: 'templates/edit/:id', loadComponent: () => import('./components/edit-template/edit-template').then(m => m.EditTemplateComponent), canActivate: [authGuard] },
     { path: 'templates/search', component: TemplateSearchComponent, canActivate: [authGuard] },
     { path: 'users/search', component: UserSearchComponent, canActivate: [authGuard] },
     { path: 'admin', loadComponent: () => import('./components/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent), canActivate: [adminGuard] },

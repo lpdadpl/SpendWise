@@ -77,7 +77,8 @@
                                     icon="pi pi-eye" pTooltip="Ver" tooltipPosition="top">
                                 </button>
                                 <button pButton class="p-button-rounded p-button-success p-button-outlined"
-                                    icon="pi pi-file-edit" pTooltip="Editar" tooltipPosition="top">
+                                    icon="pi pi-file-edit" pTooltip="Editar" tooltipPosition="top"
+                                    (click)="navigate('/templates/edit/' + template.id)">
                                 </button>
                             </div>
                         </td>
