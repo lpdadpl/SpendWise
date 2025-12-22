@@ -3,7 +3,7 @@ package com.hazerta.SpendwiseBack.controller;
 import com.hazerta.SpendwiseBack.config.JwtUtil;
 import com.hazerta.SpendwiseBack.dto.JwtRequest;
 import com.hazerta.SpendwiseBack.dto.JwtResponse;
-import com.hazerta.SpendwiseBack.dto.UserDto;
+import com.hazerta.SpendwiseBack.dto.JwtResponse;
 import com.hazerta.SpendwiseBack.entity.User;
 import com.hazerta.SpendwiseBack.service.AuthService;
 import com.hazerta.SpendwiseBack.service.JwtUserDetailsService;
@@ -53,7 +53,7 @@ public class JwtAuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> saveUser(@RequestBody UserDto user) {
+    public ResponseEntity<?> saveUser(@RequestBody com.hazerta.SpendwiseBack.dto.RegisterDto user) {
         User newUser = new User();
         newUser.setUsername(user.username());
         newUser.setEmail(user.email());

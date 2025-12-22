@@ -5,13 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TemplateService } from '../../services/template.service';
 import { NavbarComponent } from '../navbar/navbar';
 import { ForecastTemplate } from '../../models/template.model';
-import { CardModule } from 'primeng/card';
-import { InputTextModule } from 'primeng/inputtext';
-import { TextareaModule } from 'primeng/textarea';
-import { CheckboxModule } from 'primeng/checkbox';
-import { ButtonModule } from 'primeng/button';
-import { MessageModule } from 'primeng/message';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { TemplateRow, TemplateStructure } from '../../models/template-structure.model';
+import { LucideAngularModule, Trash2, Plus, AlertCircle, FileText, CheckCircle, Table, ArrowLeft, Save } from 'lucide-angular';
 
 @Component({
     selector: 'app-template-edit',
@@ -20,13 +15,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
         CommonModule,
         FormsModule,
         NavbarComponent,
-        CardModule,
-        InputTextModule,
-        TextareaModule,
-        CheckboxModule,
-        ButtonModule,
-        MessageModule,
-        ProgressSpinnerModule
+        LucideAngularModule
     ],
     templateUrl: './template-edit.html',
     styleUrl: './template-edit.css'
@@ -37,11 +26,13 @@ export class TemplateEditComponent implements OnInit {
     isLoading = true;
     isSaving = false;
     error = '';
+    success = false;
 
     // Form model
     name = '';
     description = '';
     isPublic = false;
+    rows: TemplateRow[] = [];
 
     constructor(
         private route: ActivatedRoute,
@@ -69,6 +60,22 @@ export class TemplateEditComponent implements OnInit {
                 this.name = data.name;
                 this.description = data.description;
                 this.isPublic = data.isPublic;
+
+                // Parse structure
+                try {
+                    if (data.structure) {
+                        const structure: TemplateStructure = JSON.parse(data.structure);
+                        this.rows = structure.rows || [];
+                    }
+                } catch (e) {
+                    console.error('Error parsing structure', e);
+                    this.rows = [];
+                }
+
+                if (this.rows.length === 0) {
+                    this.addItem(); // Ensure at least one row
+                }
+
                 this.isLoading = false;
             },
             error: (err) => {
@@ -78,22 +85,50 @@ export class TemplateEditComponent implements OnInit {
         });
     }
 
+    addItem() {
+        this.rows.push({
+            name: '',
+            transaction_ref_id: null,
+            transaction_kind: 'EXPENSE',
+            amount: 0
+        });
+    }
+
+    removeItem(index: number) {
+        if (this.rows.length > 1) {
+            this.rows.splice(index, 1);
+        }
+    }
+
     onSubmit() {
         if (!this.id) return;
+        if (!this.name || !this.description) {
+            this.error = 'Completa los campos requeridos';
+            return;
+        }
 
         this.isSaving = true;
         this.error = '';
 
+        const structure: TemplateStructure = {
+            type: 'table',
+            rows: this.rows
+        };
+
         const updates: Partial<ForecastTemplate> = {
             name: this.name,
             description: this.description,
-            isPublic: this.isPublic
+            isPublic: this.isPublic,
+            structure: JSON.stringify(structure)
         };
 
         this.templateService.updateTemplate(this.id, updates).subscribe({
             next: () => {
+                this.success = true;
                 this.isSaving = false;
-                this.router.navigate(['/templates']);
+                setTimeout(() => {
+                    this.router.navigate(['/templates']);
+                }, 1500);
             },
             error: (err) => {
                 this.error = 'Error al actualizar la plantilla';

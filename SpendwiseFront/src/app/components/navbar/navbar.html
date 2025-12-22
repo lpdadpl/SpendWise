@@ -25,6 +25,12 @@
             class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
             <i class="pi pi-user" style="font-size: 1.5rem"></i>
           </a>
+          <!-- Logged in Admin -->
+          <a *ngIf="authService.isAdmin()" routerLink="/admin" routerLinkActive="text-indigo-600"
+            class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+            title="Panel de Administración">
+            <i class="pi pi-cog" style="font-size: 1.5rem"></i>
+          </a>
           <button (click)="logout()"
             class="ml-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200">
             Cerrar Sesión

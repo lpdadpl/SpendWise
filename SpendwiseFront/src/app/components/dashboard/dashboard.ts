@@ -5,7 +5,7 @@ import { NavbarComponent } from '../navbar/navbar';
 import { AuthService } from '../../services/auth.service';
 import { TransactionService } from '../../services/transaction.service';
 import { TemplateService } from '../../services/template.service';
-import { LucideAngularModule, FileText, Search, Users, UserCircle, Plus, TrendingUp, Wallet, Eye } from 'lucide-angular';
+import { LucideAngularModule, FileText, Search, Users, UserCircle, Plus, TrendingUp, Wallet, Eye, Settings, Edit } from 'lucide-angular';
 
 @Component({
     selector: 'app-dashboard',

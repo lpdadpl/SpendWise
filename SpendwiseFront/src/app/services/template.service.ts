@@ -20,6 +20,10 @@ export class TemplateService {
         return this.http.get<ForecastTemplate[]>(`${this.API_URL}/mine`);
     }
 
+    createTemplate(template: Partial<ForecastTemplate>) {
+        return this.http.post<ForecastTemplate>(this.API_URL, template);
+    }
+
     getTemplateById(id: number) {
         return this.http.get<any>(`${this.API_URL}/${id}`);
     }

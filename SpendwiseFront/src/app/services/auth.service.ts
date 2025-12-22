@@ -19,6 +19,10 @@ export class AuthService {
     private userSubject = signal<User | null>(null);
     readonly user = this.userSubject.asReadonly();
     readonly isAuthenticated = computed(() => !!this.userSubject());
+    readonly isAdmin = computed(() => {
+        const user = this.userSubject();
+        return user?.role === 'ROLE_ADMIN';
+    });
 
     constructor() {
         this.checkAuth();
@@ -29,7 +33,9 @@ export class AuthService {
         if (token) {
             try {
                 const payload = JSON.parse(atob(token.split('.')[1]));
-                const user: User = { username: payload.sub, email: '', password: '' };
+                // Extract role from payload.role (matches JwtUtil backend)
+                const role = payload.role || 'USER';
+                const user: User = { username: payload.sub, email: '', password: '', role: role };
                 this.userSubject.set(user);
             } catch (e) {
                 this.logout();
@@ -85,6 +91,15 @@ export class AuthService {
 
     private setSession(token: string, username: string) {
         localStorage.setItem(this.STORAGE_KEY, token);
-        this.userSubject.set({ username, email: '', password: '' });
+        let role = 'USER';
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            if (payload.role) {
+                role = payload.role;
+            }
+        } catch (e) {
+            console.error('Error parsing token', e);
+        }
+        this.userSubject.set({ username, email: '', password: '', role });
     }
 }

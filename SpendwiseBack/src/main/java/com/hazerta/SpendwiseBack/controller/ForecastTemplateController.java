@@ -36,4 +36,18 @@ public class ForecastTemplateController {
     public ForecastTemplate getTemplateById(@PathVariable Long id) {
         return forecastTemplateService.getTemplateById(id);
     }
+
+    @org.springframework.web.bind.annotation.PostMapping
+    public ForecastTemplate createTemplate(
+            @org.springframework.web.bind.annotation.RequestBody ForecastTemplate template,
+            Authentication authentication) {
+        return forecastTemplateService.createTemplate(template, authentication.getName());
+    }
+
+    @org.springframework.web.bind.annotation.PutMapping("/{id}")
+    public ForecastTemplate updateTemplate(@PathVariable Long id,
+            @org.springframework.web.bind.annotation.RequestBody ForecastTemplate template,
+            Authentication authentication) {
+        return forecastTemplateService.updateTemplate(id, template, authentication.getName());
+    }
 }

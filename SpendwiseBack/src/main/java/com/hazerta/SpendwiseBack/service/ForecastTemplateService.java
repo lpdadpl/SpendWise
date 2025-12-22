@@ -56,4 +56,42 @@ public class ForecastTemplateService {
         return forecastTemplateRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Template not found with id: " + id));
     }
+
+    @Transactional
+    public ForecastTemplate createTemplate(ForecastTemplate template, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
+
+        ForecastTemplate savedTemplate = forecastTemplateRepository.save(template);
+
+        ForecastTemplateOwned ownership = new ForecastTemplateOwned();
+        ownership.setUser(user);
+        ownership.setTemplate(savedTemplate);
+        forecastTemplateOwnedRepository.save(ownership);
+
+        return savedTemplate;
+    }
+
+    @Transactional
+    public ForecastTemplate updateTemplate(Long id, ForecastTemplate templateDetails, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
+
+        // Check ownership
+        boolean isOwner = forecastTemplateOwnedRepository.findByUser_Id(user.getId())
+                .stream()
+                .anyMatch(owned -> owned.getTemplate().getId().equals(id));
+
+        if (!isOwner) {
+            throw new RuntimeException("User not authorized to update this template");
+        }
+
+        ForecastTemplate template = getTemplateById(id);
+        template.setName(templateDetails.getName());
+        template.setDescription(templateDetails.getDescription());
+        template.setIsPublic(templateDetails.getIsPublic());
+        template.setStructure(templateDetails.getStructure());
+
+        return forecastTemplateRepository.save(template);
+    }
 }
