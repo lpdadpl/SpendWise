@@ -17,9 +17,11 @@
                 <input type="text" pInputText placeholder="Buscar plantillas..." [(ngModel)]="searchTerm"
                     class="w-full" />
             </p-iconField>
-            <p-button label="Buscar" icon="pi pi-search"
+            <p-button label="Buscar" icon="pi pi-search" (onClick)="search()"
                 [style]="{ 'background-color': 'var(--color-primary-green)', 'border': 'none' }"></p-button>
         </div>
+
+        <p *ngIf="message" class="mb-4 rounded-lg bg-blue-50 px-4 py-3 text-blue-700">{{ message }}</p>
 
         <p-dataview [value]="templates" [layout]="'grid'" [paginator]="true" [rows]="6">
             <ng-template pTemplate="grid" let-templates>
@@ -34,21 +36,16 @@
                                     {{ template.name }}
                                 </div>
                                 <div class="flex align-items-center gap-2 mt-2">
-                                    <span class="font-semibold text-gray-600">Por: {{ template.author }}</span>
+                                    <span class="font-semibold text-gray-600">Por: {{ template.ownerName || 'Comunidad' }}</span>
                                 </div>
                                 <div class="flex align-items-center gap-2 mt-3">
-                                    <p-tag [value]="template.transactionType"
-                                        [severity]="getSeverity(template.transactionType)"></p-tag>
-                                    <span class="flex align-items-center gap-1 ml-4 text-yellow-500 font-bold">
-                                        <i class="pi pi-star-fill"></i> {{ template.rating }}
-                                    </span>
+                                    <p-tag [value]="template.isPublic ? 'Pública' : 'Privada'" severity="success"></p-tag>
                                 </div>
                             </div>
                             <div
                                 class="flex align-items-center justify-content-between justify-between mt-3 pt-3 border-t border-gray-100">
-                                <span class="text-xl font-bold text-gray-800">{{ template.price === 0 ? 'Gratis' : '$' +
-                                    template.price }}</span>
-                                <p-button icon="pi pi-download" label="Ver Detalles" size="small"
+                                <span class="text-xl font-bold text-gray-800">Gratis</span>
+                                <p-button icon="pi pi-download" label="Copiar" size="small" (onClick)="copy(template)"
                                     [style]="{ 'background-color': 'var(--color-primary-blue)', 'border': 'none' }"></p-button>
                             </div>
                         </div>

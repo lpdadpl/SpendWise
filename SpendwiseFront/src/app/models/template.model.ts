@@ -5,6 +5,7 @@ export interface ForecastTemplate {
     structure: string;
     isPublic: boolean;
     createdAt: string;
+    ownerName?: string;
 }
 
 export interface TemplateRow {

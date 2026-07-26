@@ -49,8 +49,8 @@ Este proyecto sigue una arquitectura **Full-Stack** moderna, separando completam
 
 El proyecto se divide en dos carpetas principales que se ejecutan de forma independiente:
 
-1.  **`/spendwise-backend`**: Contiene la aplicación Spring Boot, la lógica de negocio, los modelos JPA y los controladores REST.
-2.  **`/spendwise-frontend`**: Contiene la aplicación Angular, los componentes de la interfaz de usuario, servicios de datos y el Interceptor JWT.
+1.  **`/SpendwiseBack`**: Contiene la aplicación Spring Boot, la lógica de negocio, los modelos JPA y los controladores REST.
+2.  **`/SpendwiseFront`**: Contiene la aplicación Angular, los componentes de la interfaz de usuario, servicios de datos y el Interceptor JWT.
 
 ---
 
@@ -59,10 +59,37 @@ El proyecto se divide en dos carpetas principales que se ejecutan de forma indep
 ### 1. Requisitos Previos
 
 Asegúrate de tener instalado:
-* Java Development Kit (JDK) 17 o superior.
+* Java Development Kit (JDK) 21 o superior.
 * Node.js y pnpm.
 * Angular CLI (`npm install -g @angular/cli`).
 * Una instancia de PostgreSQL.
+
+### 2. Variables de Entorno Backend
+
+El backend no debe arrancarse con secretos versionados. Usa como referencia `SpendwiseBack/.env.example` y define al menos:
+
+* `SPRING_DATASOURCE_URL`
+* `SPRING_DATASOURCE_USERNAME`
+* `SPRING_DATASOURCE_PASSWORD`
+* `JWT_SIGNING_KEY`
+* `APP_CORS_ALLOWED_ORIGINS`
+
+### 3. Ejecución Local
+
+Frontend:
+
+```bash
+cd SpendwiseFront
+pnpm install
+pnpm start
+```
+
+Backend:
+
+```bash
+cd SpendwiseBack
+./mvnw spring-boot:run
+```
 
 
 
@@ -72,9 +99,9 @@ El proyecto se está desarrollando utilizando **Scrum** con Sprints de [X] seman
 
 ### Próximos Pasos (Sprint 1 Focus)
 
-1.  Implementación completa de la seguridad JWT en Spring Security.
-2.  Creación de los componentes de Login y Registro en Angular.
-3.  Desarrollo del CRUD para la entidad `Category`.
+1.  Comparación de previsión vs gasto real.
+2.  Biblioteca de plantillas públicas copiables.
+3.  Objetivos financieros e insights personalizados.
 
 ---
 

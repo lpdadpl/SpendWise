@@ -11,4 +11,8 @@ public interface ForecastTemplateOwnedRepository extends JpaRepository<ForecastT
     List<ForecastTemplateOwned> findByUser_Username(String username);
 
     List<ForecastTemplateOwned> findByUser_Id(Long userId);
+
+    boolean existsByUser_IdAndTemplate_Id(Long userId, Long templateId);
+
+    java.util.Optional<ForecastTemplateOwned> findByUser_IdAndTemplate_Id(Long userId, Long templateId);
 }

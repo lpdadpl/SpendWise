@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/user.model';
 import { AuthService } from '../../services/auth.service';
+import { environment } from '../../../environments/environment';
 
 import { RouterModule } from '@angular/router';
 
@@ -21,13 +22,14 @@ export class AdminDashboardComponent {
 
     users = signal<User[]>([]);
     errorMessage = signal<string>('');
+    private readonly apiUrl = `${environment.apiUrl}/api/admin/users`;
 
     constructor() {
         this.loadUsers();
     }
 
     loadUsers() {
-        this.http.get<User[]>('http://localhost:8080/api/admin/users').subscribe({
+        this.http.get<User[]>(this.apiUrl).subscribe({
             next: (data) => this.users.set(data),
             error: (err) => this.errorMessage.set('Error al cargar usuarios')
         });
@@ -37,7 +39,7 @@ export class AdminDashboardComponent {
         if (!userId) return;
 
         if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
-            this.http.delete(`http://localhost:8080/api/admin/users/${userId}`, { responseType: 'text' }).subscribe({
+            this.http.delete(`${this.apiUrl}/${userId}`, { responseType: 'text' }).subscribe({
                 next: () => {
                     this.loadUsers(); // Reload list
                 },

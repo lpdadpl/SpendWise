@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ForecastTemplate } from '../models/template.model';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -9,7 +10,7 @@ import { AuthService } from './auth.service';
 export class TemplateService {
     templates = signal<ForecastTemplate[]>([]);
 
-    private readonly API_URL = 'http://localhost:8080/api/templates';
+    private readonly API_URL = `${environment.apiUrl}/api/templates`;
 
     constructor(
         private http: HttpClient,
@@ -20,12 +21,22 @@ export class TemplateService {
         return this.http.get<ForecastTemplate[]>(`${this.API_URL}/mine`);
     }
 
+    getPublicTemplates(search = '') {
+        return this.http.get<ForecastTemplate[]>(`${this.API_URL}/public`, {
+            params: search ? { search } : {}
+        });
+    }
+
+    copyTemplate(id: number) {
+        return this.http.post<ForecastTemplate>(`${this.API_URL}/${id}/copy`, {});
+    }
+
     createTemplate(template: Partial<ForecastTemplate>) {
         return this.http.post<ForecastTemplate>(this.API_URL, template);
     }
 
     getTemplateById(id: number) {
-        return this.http.get<any>(`${this.API_URL}/${id}`);
+        return this.http.get<ForecastTemplate>(`${this.API_URL}/${id}`);
     }
 
     updateTemplate(id: number, template: Partial<ForecastTemplate>) {

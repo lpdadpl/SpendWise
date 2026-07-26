@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -27,7 +28,7 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<TransactionDto> create(@RequestBody CreateTransactionDto dto, Authentication authentication) {
+    public ResponseEntity<TransactionDto> create(@Valid @RequestBody CreateTransactionDto dto, Authentication authentication) {
         String username = authentication.getName();
         TransactionDto created = transactionService.create(username, dto);
         return new ResponseEntity<>(created, HttpStatus.CREATED);

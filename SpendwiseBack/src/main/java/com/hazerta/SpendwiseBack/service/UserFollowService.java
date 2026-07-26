@@ -19,16 +19,15 @@ public class UserFollowService {
     }
 
     @Transactional
-    public void follow(Long followerId, Long followedId) {
+    public void follow(String followerUsername, Long followedId) {
+        User follower = userRepository.findByUsername(followerUsername)
+                .orElseThrow(() -> new IllegalArgumentException("Follower not found"));
+        Long followerId = follower.getId();
         if (followerId.equals(followedId)) {
             throw new IllegalArgumentException("User cannot follow themselves");
         }
-        // Ensure both users exist
-        User follower = userRepository.findById(followerId)
-                .orElseThrow(() -> new IllegalArgumentException("Follower not found"));
         User followed = userRepository.findById(followedId)
                 .orElseThrow(() -> new IllegalArgumentException("User to follow not found"));
-        // Check if already following
         if (userFollowRepository.existsByFollowerIdAndFollowedId(followerId, followedId)) {
             throw new IllegalStateException("Already following this user");
         }
@@ -39,13 +38,19 @@ public class UserFollowService {
     }
 
     @Transactional
-    public void unfollow(Long followerId, Long followedId) {
+    public void unfollow(String followerUsername, Long followedId) {
+        User follower = userRepository.findByUsername(followerUsername)
+                .orElseThrow(() -> new IllegalArgumentException("Follower not found"));
+        Long followerId = follower.getId();
         UserFollow follow = userFollowRepository.findByFollowerIdAndFollowedId(followerId, followedId)
                 .orElseThrow(() -> new IllegalArgumentException("Follow relationship does not exist"));
         userFollowRepository.delete(follow);
     }
 
-    public boolean isFollowing(Long followerId, Long followedId) {
+    public boolean isFollowing(String followerUsername, Long followedId) {
+        User follower = userRepository.findByUsername(followerUsername)
+                .orElseThrow(() -> new IllegalArgumentException("Follower not found"));
+        Long followerId = follower.getId();
         return userFollowRepository.existsByFollowerIdAndFollowedId(followerId, followedId);
     }
 

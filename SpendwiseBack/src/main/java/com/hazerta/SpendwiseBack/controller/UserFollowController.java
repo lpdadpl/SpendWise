@@ -2,6 +2,7 @@ package com.hazerta.SpendwiseBack.controller;
 
 import com.hazerta.SpendwiseBack.service.UserFollowService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,15 +15,15 @@ public class UserFollowController {
         this.userFollowService = userFollowService;
     }
 
-    @PostMapping("/{followerId}/follow/{followedId}")
-    public ResponseEntity<?> follow(@PathVariable Long followerId, @PathVariable Long followedId) {
-        userFollowService.follow(followerId, followedId);
+    @PostMapping("/follow/{followedId}")
+    public ResponseEntity<?> follow(@PathVariable Long followedId, Authentication authentication) {
+        userFollowService.follow(authentication.getName(), followedId);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{followerId}/unfollow/{followedId}")
-    public ResponseEntity<?> unfollow(@PathVariable Long followerId, @PathVariable Long followedId) {
-        userFollowService.unfollow(followerId, followedId);
+    @DeleteMapping("/unfollow/{followedId}")
+    public ResponseEntity<?> unfollow(@PathVariable Long followedId, Authentication authentication) {
+        userFollowService.unfollow(authentication.getName(), followedId);
         return ResponseEntity.ok().build();
     }
 
@@ -32,9 +33,9 @@ public class UserFollowController {
         return ResponseEntity.ok(count);
     }
 
-    @GetMapping("/{followerId}/isFollowing/{followedId}")
-    public ResponseEntity<Boolean> isFollowing(@PathVariable Long followerId, @PathVariable Long followedId) {
-        boolean following = userFollowService.isFollowing(followerId, followedId);
+    @GetMapping("/isFollowing/{followedId}")
+    public ResponseEntity<Boolean> isFollowing(@PathVariable Long followedId, Authentication authentication) {
+        boolean following = userFollowService.isFollowing(authentication.getName(), followedId);
         return ResponseEntity.ok(following);
     }
 }

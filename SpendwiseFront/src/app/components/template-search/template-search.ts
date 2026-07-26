@@ -10,6 +10,8 @@ import { InputIconModule } from 'primeng/inputicon';
 
 import { RouterLink } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar';
+import { TemplateService } from '../../services/template.service';
+import { ForecastTemplate } from '../../models/template.model';
 
 @Component({
     selector: 'app-template-search',
@@ -20,24 +22,24 @@ import { NavbarComponent } from '../navbar/navbar';
 })
 export class TemplateSearchComponent {
     searchTerm: string = '';
-    templates = [
-        { name: 'Presupuesto Familiar', author: 'juanperez', transactionType: 'Hogar', price: 0, rating: 4.5 },
-        { name: 'Viaje a Europa', author: 'mariagarcia', transactionType: 'Viajes', price: 5, rating: 4.8 },
-        { name: 'Ahorro Universitario', author: 'carloslopez', transactionType: 'Educación', price: 0, rating: 4.2 },
-        { name: 'Control de Gastos Diarios', author: 'anarui', transactionType: 'Personal', price: 2, rating: 4.7 },
-        { name: 'Planificación de Boda', author: 'luisgonzalez', transactionType: 'Eventos', price: 10, rating: 4.9 }
-    ];
+    templates: ForecastTemplate[] = [];
+    message = '';
 
-    getSeverity(transactionType: string) {
-        switch (transactionType) {
-            case 'Hogar': return 'success';
-            case 'Viajes': return 'info';
-            case 'Educación': return 'warn';
-            case 'Personal': return 'secondary';
-            case 'Eventos': return 'danger';
-            default: return 'info';
-        }
+    search() {
+        this.templateService.getPublicTemplates(this.searchTerm).subscribe({
+            next: templates => this.templates = templates,
+            error: () => this.message = 'No se pudieron cargar las plantillas públicas.'
+        });
     }
 
-    constructor() { }
+    copy(template: ForecastTemplate) {
+        this.templateService.copyTemplate(template.id).subscribe({
+            next: () => this.message = `Plantilla "${template.name}" copiada a tu biblioteca.`,
+            error: () => this.message = 'No se pudo copiar la plantilla.'
+        });
+    }
+
+    constructor(private templateService: TemplateService) {
+        this.search();
+    }
 }

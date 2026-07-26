@@ -26,9 +26,11 @@ export class LoginComponent {
         this.authService.login(this.username, this.password).subscribe({
             next: (result) => {
                 this.isLoading = false;
-                // Si el login es exitoso, el backend devuelve un objeto con el token.
-                // Si hay error, salta al bloque 'error'.
-                this.router.navigate(['/dashboard']);
+                if (result.success) {
+                    this.router.navigate(['/dashboard']);
+                    return;
+                }
+                this.error = result.message || 'Credenciales incorrectas.';
             },
             error: (err) => {
                 console.error("Login fallido:", err);

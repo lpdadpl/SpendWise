@@ -4,22 +4,28 @@ spring:
 
   sql:
     init:
-      mode: always
+      mode: ${SPRING_SQL_INIT_MODE:never}
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    # Usamos la variable definida en app.yaml, y ponemos el valor local como fallback
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/Spendwise}
-    username: ${SPRING_DATASOURCE_USERNAME:postgres}
-    password: ${SPRING_DATASOURCE_PASSWORD:a}
+    username: ${SPRING_DATASOURCE_USERNAME:spendwise}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
     database: postgresql
     show-sql: false
     defer-datasource-initialization: true
 
+  flyway:
+    enabled: ${SPRING_FLYWAY_ENABLED:false}
+    baseline-on-migrate: true
+
 jwt:
-  # Lee la clave de app.yaml, si no existe usa la de desarrollo
-  secret: ${JWT_SIGNING_KEY:16d557376a20c3866385d0d62540b6e41b22e1b4f4c7e6c9869a842f1b4c954a}
+  secret: ${JWT_SIGNING_KEY}
+
+app:
+  cors:
+    allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:4200}

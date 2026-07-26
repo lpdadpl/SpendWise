@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { User } from '../models/user.model';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 interface AuthResponse {
     accessToken: string;
@@ -13,7 +14,7 @@ interface AuthResponse {
 })
 export class AuthService {
     private readonly STORAGE_KEY = 'spendwise_auth';
-    private readonly API_URL = 'http://localhost:8080/auth';
+    private readonly API_URL = `${environment.apiUrl}/auth`;
     private http = inject(HttpClient);
 
     private userSubject = signal<User | null>(null);
@@ -98,7 +99,7 @@ export class AuthService {
                 role = payload.role;
             }
         } catch (e) {
-            console.error('Error parsing token', e);
+            this.logout();
         }
         this.userSubject.set({ username, email: '', password: '', role });
     }

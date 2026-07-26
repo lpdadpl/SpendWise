@@ -8,5 +8,8 @@ import java.util.List;
 
 @Repository
 public interface ForecastTemplateRepository extends JpaRepository<ForecastTemplate, Long> {
+    List<ForecastTemplate> findByIsPublicTrueOrderByCreatedAtDesc();
+
+    List<ForecastTemplate> findByIsPublicTrueAndNameContainingIgnoreCaseOrderByCreatedAtDesc(String name);
 
 }
